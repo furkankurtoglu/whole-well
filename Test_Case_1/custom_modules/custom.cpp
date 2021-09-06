@@ -154,7 +154,7 @@ void setup_tissue( void )
 	double Zrange = Zmax - Zmin; 
 	
 	// create some of each type of cell 
-	
+	/*
 	Cell* pC;
 	
 	for( int k=0; k < cell_definitions_by_index.size() ; k++ )
@@ -173,7 +173,20 @@ void setup_tissue( void )
 		}
 	}
 	std::cout << std::endl; 
-	
+	*/
+	Cell* pC;
+	Cell_Definition* pCD = cell_definitions_by_index[0];
+	std::cout << "Placing cells of type " << pCD->name << " ... " << std::endl; 
+		for( int n = 0 ; n < parameters.ints("number_of_cells") ; n++ )
+		{
+			std::vector<double> position = {0,0,0}; 
+			position[0] = Xmin + UniformRandom()*Xrange; 
+			position[1] = Ymin + UniformRandom()*Yrange; 
+			position[2] = Zmin + UniformRandom()*Zrange; 
+			
+			pC = create_cell( *pCD ); 
+			pC->assign_position( position );
+		}
 	// load cells from your CSV file (if enabled)
 	load_cells_from_pugixml(); 	
 	

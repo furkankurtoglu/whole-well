@@ -77,7 +77,7 @@
 		<x_min>-1440</x_min>
 		<x_max>1440</x_max>
 		<y_min>-256</y_min>
-		<y_max>256</y_max>
+		<y_max>5104</y_max>
 		<z_min>-1440</z_min>
 		<z_max>1440</z_max>
 		<dx>32</dx>
@@ -104,13 +104,13 @@
 		<folder>output</folder> <!-- use . for root --> 
 
 		<full_data>
-			<interval units="min">360</interval>
-			<enable>false</enable>
+			<interval units="min">1</interval>
+			<enable>true</enable>
 		</full_data>
 		
 		<SVG>
-			<interval units="min">60</interval>
-			<enable>false</enable>
+			<interval units="min">1</interval>
+			<enable>true</enable>
 		</SVG>
 		
 		<legacy_data>
@@ -125,7 +125,7 @@
 
 	<microenvironment_setup>
 	
-		<variable name="substrate" units="dimensionless" ID="0">
+		<variable name="chemokine" units="dimensionless" ID="2">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
 				<decay_rate units="1/min">10</decay_rate>  
@@ -147,7 +147,7 @@
  		
 -->
 		</variable>
-		<variable name="oxygen" units="mmHg" ID="1">
+		<variable name="oxygen" units="mmHg" ID="0">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">108000.0</diffusion_coefficient>
 				<decay_rate units="1/min">0.0</decay_rate> 
@@ -157,7 +157,7 @@
                 <boundary_value ID="ymax" enabled="true">38.0</boundary_value>
 		</variable>
 		
-		<variable name="glucose" units="mMolar" ID="2">
+		<variable name="glucose" units="mMolar" ID="1">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">30000.0</diffusion_coefficient> <!--https://www.ncbi.nlm.nih.gov/pubmed/7597991 -->
 				<decay_rate units="1/min">0.0</decay_rate> 
@@ -199,16 +199,16 @@
 					
 					<!-- use phase_transition_rates OR phase_durations -->
 					<phase_durations units="min"> 
-						<duration index="0" fixed_duration="false">300.0</duration>
-						<duration index="1" fixed_duration="true">480</duration>
-						<duration index="2" fixed_duration="true">240</duration>
-						<duration index="3" fixed_duration="true">60</duration>
+						<duration index="0" fixed_duration="false">0</duration>
+						<duration index="1" fixed_duration="true">0</duration>
+						<duration index="2" fixed_duration="true">0</duration>
+						<duration index="3" fixed_duration="true">0</duration>
 					</phase_durations>
 				</cycle>
 				
 				<death>  
 					<model code="100" name="apoptosis"> 
-						<death_rate units="1/min">5.31667e-05</death_rate>
+						<death_rate units="1/min">0</death_rate>
 						<!-- use phase_transition_rates OR phase_durations -->
 						<!--
 						<phase_transition_rates units="1/min">
@@ -299,10 +299,22 @@
 				</motility>
 				
 				<secretion>
-					<substrate name="substrate">
-						<secretion_rate units="1/min">0</secretion_rate>
+					<substrate name="chemokine">
+						<secretion_rate units="1/min">0.001</secretion_rate>
 						<secretion_target units="substrate density">1</secretion_target>
 						<uptake_rate units="1/min">0</uptake_rate>
+						<net_export_rate units="total substrate/min">0</net_export_rate> 
+					</substrate> 
+					<substrate name="oxygen">
+						<secretion_rate units="1/min">0</secretion_rate>
+						<secretion_target units="substrate density">1</secretion_target>
+						<uptake_rate units="1/min">0.005</uptake_rate>
+						<net_export_rate units="total substrate/min">0</net_export_rate> 
+					</substrate> 
+                    <substrate name="glucose">
+						<secretion_rate units="1/min">0</secretion_rate>
+						<secretion_target units="substrate density">1</secretion_target>
+						<uptake_rate units="1/min">0.001</uptake_rate>
 						<net_export_rate units="total substrate/min">0</net_export_rate> 
 					</substrate> 
 				</secretion>
@@ -330,7 +342,7 @@
 		<test_cell_seeding type="bool" units = "none">true</test_cell_seeding>
 		<fibroblast_seeding type="bool" units="none">false</fibroblast_seeding>
 		<organoid_cell_seeding type="bool" units="none">false</organoid_cell_seeding>
-		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">1</number_of_cells>
+		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">50000</number_of_cells>
 	</user_parameters>
 	
 </PhysiCell_settings>

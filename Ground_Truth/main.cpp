@@ -174,13 +174,18 @@ int main( int argc, char* argv[] )
 	}
 	
 	// main loop 
-	
+    
+    std::vector<double> v = { 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 , 20.0 };
+	int i = 0;
+    int j = 0;
 	try 
 	{		
+        
 		while( PhysiCell_globals.current_time < PhysiCell_settings.max_time + 0.1*diffusion_dt )
 		{
+            //std::cout << "NEXT TIME WILL BE SAVED AT : " << v[i] << std::endl;
 			// save data if it's time. 
-			if( fabs( PhysiCell_globals.current_time - PhysiCell_globals.next_full_save_time ) < 0.01 * diffusion_dt )
+			if( fabs( PhysiCell_globals.current_time - v[i] ) < 0.01 * diffusion_dt )
 			{
 				display_simulation_status( std::cout ); 
 				if( PhysiCell_settings.enable_legacy_saves == true )
@@ -197,10 +202,11 @@ int main( int argc, char* argv[] )
 				
 				PhysiCell_globals.full_output_index++; 
 				PhysiCell_globals.next_full_save_time += PhysiCell_settings.full_save_interval;
+                i += 1; 
 			}
 			
 			// save SVG plot if it's time
-			if( fabs( PhysiCell_globals.current_time - PhysiCell_globals.next_SVG_save_time  ) < 0.01 * diffusion_dt )
+			if( fabs( PhysiCell_globals.current_time - v[j]  ) < 0.01 * diffusion_dt )
 			{
 				if( PhysiCell_settings.enable_SVG_saves == true )
 				{	
@@ -209,6 +215,7 @@ int main( int argc, char* argv[] )
 					
 					PhysiCell_globals.SVG_output_index++; 
 					PhysiCell_globals.next_SVG_save_time  += PhysiCell_settings.SVG_save_interval;
+                    j += 1;
 				}
 			}
 
@@ -223,6 +230,7 @@ int main( int argc, char* argv[] )
 			*/
 			
 			PhysiCell_globals.current_time += diffusion_dt;
+            
 		}
 		
 		if( PhysiCell_settings.enable_legacy_saves == true )
@@ -248,6 +256,7 @@ int main( int argc, char* argv[] )
 	
 	std::cout << std::endl << "Total simulation runtime: " << std::endl; 
 	BioFVM::display_stopwatch_value( std::cout , BioFVM::runtime_stopwatch_value() ); 
+
 
 	return 0; 
 }

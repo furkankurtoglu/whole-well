@@ -30,7 +30,7 @@ import scipy.io as sio
 import xml.etree.ElementTree as ET
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-
+saving_times = np.array([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 20.0])
 def data_parser (time_point):
     # Fine MicroEnv Data Parsing
     fine_tuple = []
@@ -83,9 +83,20 @@ time_point = "output000000"
 subs_list = get_subs_name()
 
 
-
-
 fig, axs = plt.subplots()
+
+# color bar
+tp = "final"
+ft, ct, tt = data_parser(tp)
+fine_X, fine_Y, fine_oxy = ft
+zmin = min([min(zl) for zl in fine_oxy])
+zmax = max([max(zl) for zl in fine_oxy])
+levels = np.linspace(zmin, 38,41)
+kw = dict(levels=levels, vmin=zmin, vmax=38.000, origin='lower')
+cp = axs.contourf(fine_Y,fine_X,fine_oxy, **kw)
+cbar = plt.colorbar(cp)
+axs.clear()
+
 
 
 def animate(i):
@@ -93,11 +104,16 @@ def animate(i):
     ft, ct, tt = data_parser(time_p)
     fine_X, fine_Y, fine_oxy = ft
     axs.clear()
-    axs.contourf(fine_X,fine_Y,fine_oxy)
-    axs.set_title('%02d'%(i)) 
-    axs.axis('equal')
+    axs.contourf(fine_Y,fine_X,fine_oxy, **kw)
+    axs.set_title('Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+    axs.invert_xaxis()
+    axs.axis('scaled')
+    
+    
+    
+number_of_frames = len(saving_times)
 
-ani = matplotlib.animation.FuncAnimation(fig,animate,blit=False, frames=20,repeat=False)
+ani = matplotlib.animation.FuncAnimation(fig,animate,blit=False, frames=number_of_frames,repeat=False)
 
 plt.show()
 
@@ -106,42 +122,3 @@ plt.show()
 
 
 
-
-# def plot_micenvs (time_point):
-#     fine_data = sio.loadmat(time_point + "_microenvironment0.mat")['multiscale_microenvironment']
-#     # coarse_data = sio.loadmat(time_point + "_microenvironment1.mat")['multiscale_microenvironment']
-#     dx = fine_data[0,1]-fine_data[0,0]
-#     fine_x = np.unique(fine_data[0,:])
-#     fine_y = np.unique(fine_data[1,:])
-#     fine_X, fine_Y = np.meshgrid(fine_x, fine_y)
-#     fine_oxy = fine_data[4,np.where(fine_data[2,:] == 16)]
-#     fine_oxy = fine_oxy.reshape((len(fine_y),len(fine_x)))
-
-#     fig,axs = plt.subplots(1,1)
-#     cp = axs.contourf(fine_X,fine_Y,fine_oxy)
-#     axs.axis('equal')
-#     axs.set(xlim=(-3000,3000), ylim=(-500,500))
-#     fig.colorbar(cp,format = "%f")
-#     fig.tight_layout()
-#     return fine_data
-
-
-
-
-
-# main_path = Path(os.getcwd()).parent
-# out_path = os.path.join(main_path, "output")
-
-# os.chdir(out_path)
-
-# time_point = "output0000000"
-# # data = plot_micenvs(time_point)
-
-
-# # data1 = data[4,np.where(data[0,:]) == -2864]
-# # print(data1)
-
-# for i in range(0,10):
-#     timepoint=time_point+str(i)
-#     plot_micenvs(timepoint)
-    

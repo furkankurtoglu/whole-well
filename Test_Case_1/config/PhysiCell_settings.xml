@@ -97,20 +97,20 @@
 	</overall>
 	
 	<parallel>
-		<omp_num_threads>6</omp_num_threads>
+		<omp_num_threads>10</omp_num_threads>
 	</parallel> 
 	
 	<save>
 		<folder>output</folder> <!-- use . for root --> 
 
-		<full_data>
-			<interval units="min">360</interval>
-			<enable>false</enable>
+		<full_data> <!-- This part is obsolete since there is a special time intervals defined in main.cpp --> 
+			<interval units="min">1</interval>
+			<enable>true</enable>
 		</full_data>
 		
 		<SVG>
-			<interval units="min">60</interval>
-			<enable>false</enable>
+			<interval units="min">1</interval>
+			<enable>true</enable>
 		</SVG>
 		
 		<legacy_data>
@@ -124,30 +124,7 @@
 	</options>	
 
 	<microenvironment_setup>
-	
-		<variable name="substrate" units="dimensionless" ID="0">
-			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
-				<decay_rate units="1/min">10</decay_rate>  
-			</physical_parameter_set>
-			<initial_condition units="mmHg">0</initial_condition>
-			<Dirichlet_boundary_condition units="mmHg" enabled="true">0</Dirichlet_boundary_condition>
-	
-<!-- use this block to set Dirichlet boundary conditions on individual boundaries --> 
-<!--
-			<Dirichlet_options>
-				<boundary_value ID="xmin" enabled="false">0</boundary_value>
-				<boundary_value ID="xmax" enabled="false">0</boundary_value>
-				<boundary_value ID="ymin" enabled="false">0</boundary_value>
-				<boundary_value ID="ymax" enabled="false">0</boundary_value>
-				<boundary_value ID="zmin" enabled="false">1</boundary_value>
-				<boundary_value ID="zmax" enabled="false">0</boundary_value>
-			</Dirichlet_options>
-
- 		
--->
-		</variable>
-		<variable name="oxygen" units="mmHg" ID="1">
+		<variable name="oxygen" units="mmHg" ID="0">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">108000.0</diffusion_coefficient>
 				<decay_rate units="1/min">0.0</decay_rate> 
@@ -157,7 +134,7 @@
                 <boundary_value ID="ymax" enabled="true">38.0</boundary_value>
 		</variable>
 		
-		<variable name="glucose" units="mMolar" ID="2">
+		<variable name="glucose" units="mMolar" ID="1">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">30000.0</diffusion_coefficient> <!--https://www.ncbi.nlm.nih.gov/pubmed/7597991 -->
 				<decay_rate units="1/min">0.0</decay_rate> 
@@ -166,17 +143,19 @@
 			<Dirichlet_boundary_condition units="molar" enabled="false">0.0</Dirichlet_boundary_condition>
                 <boundary_value ID="ymax" enabled="true">16.897255</boundary_value>
 		</variable>
+        
+        <variable name="chemokine" units="dimensionless" ID="2">
+			<physical_parameter_set>
+				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
+				<decay_rate units="1/min">0.0</decay_rate>  
+			</physical_parameter_set>
+			<initial_condition units="mmHg">0</initial_condition>
+			<Dirichlet_boundary_condition units="mmHg" enabled="true">0</Dirichlet_boundary_condition>
+		</variable>
+        
 		<options>
 			<calculate_gradients>false</calculate_gradients>
 			<track_internalized_substrates_in_each_agent>false</track_internalized_substrates_in_each_agent>
-			<!-- not yet supported --> 
-			<initial_condition type="matlab" enabled="false">
-				<filename>./config/initial.mat</filename>
-			</initial_condition>
-			<!-- not yet supported --> 
-			<dirichlet_nodes type="matlab" enabled="false">
-				<filename>./config/dirichlet.mat</filename>
-			</dirichlet_nodes>
 		</options>
 	</microenvironment_setup>	
 	
@@ -188,36 +167,25 @@
 
 					<!-- using higher than normal significant digits to match divisions in default code -->
 					<!-- use phase_transition_rates OR phase_durations -->
-					<!--
-					<phase_transition_rates units="1/min"> 
-						<rate start_index="0" end_index="1" fixed_duration="false">0.00334672</rate>
-						<rate start_index="1" end_index="2" fixed_duration="true">0.00208333</rate>
-						<rate start_index="2" end_index="3" fixed_duration="true">0.00416667</rate>
-						<rate start_index="3" end_index="0" fixed_duration="true">0.0166667</rate>
-					</phase_transition_rates>
-					-->
 					
-					<!-- use phase_transition_rates OR phase_durations -->
-					<phase_durations units="min"> 
-						<duration index="0" fixed_duration="false">300.0</duration>
-						<duration index="1" fixed_duration="true">480</duration>
-						<duration index="2" fixed_duration="true">240</duration>
-						<duration index="3" fixed_duration="true">60</duration>
-					</phase_durations>
+					<phase_transition_rates units="1/min"> 
+						<rate start_index="0" end_index="1" fixed_duration="false">0.0</rate>
+						<rate start_index="1" end_index="2" fixed_duration="true">0.0</rate>
+						<rate start_index="2" end_index="3" fixed_duration="true">0.0</rate>
+						<rate start_index="3" end_index="0" fixed_duration="true">0.0</rate>
+					</phase_transition_rates>
+					
 				</cycle>
 				
 				<death>  
 					<model code="100" name="apoptosis"> 
-						<death_rate units="1/min">5.31667e-05</death_rate>
+						<death_rate units="1/min">0</death_rate>
 						<!-- use phase_transition_rates OR phase_durations -->
 						<!--
 						<phase_transition_rates units="1/min">
 							<rate start_index="0" end_index="1" fixed_duration="true">0.00193798</rate>
 						</phase_transition_rates>
 						-->
-						<phase_durations units="min">
-							<duration index="0" fixed_duration="true">516</duration>
-						</phase_durations>
 						<parameters>
 							<unlysed_fluid_change_rate units="1/min">0.05</unlysed_fluid_change_rate>
 							<lysed_fluid_change_rate units="1/min">0</lysed_fluid_change_rate>
@@ -240,11 +208,6 @@
 							<rate start_index="1" end_index="2" fixed_duration="true">1.15741e-5</rate>
 						</phase_transition_rates>
 -->						
-						<phase_durations units="min">
-							<duration index="0" fixed_duration="true">0</duration>
-							<duration index="1" fixed_duration="true">86400</duration>
-						</phase_durations>
-						
 						<parameters>
 							<unlysed_fluid_change_rate units="1/min">0.05</unlysed_fluid_change_rate>
 							<lysed_fluid_change_rate units="1/min">0</lysed_fluid_change_rate>
@@ -289,7 +252,7 @@
 					
 					<options>
 						<enabled>false</enabled>
-						<use_2D>true</use_2D>
+						<use_2D>false</use_2D>
 						<chemotaxis>
 							<enabled>false</enabled>
 							<substrate>oxygen</substrate>
@@ -299,19 +262,26 @@
 				</motility>
 				
 				<secretion>
-					<substrate name="substrate">
-						<secretion_rate units="1/min">0</secretion_rate>
+					<substrate name="chemokine">
+						<secretion_rate units="1/min">0.01</secretion_rate>
 						<secretion_target units="substrate density">1</secretion_target>
 						<uptake_rate units="1/min">0</uptake_rate>
 						<net_export_rate units="total substrate/min">0</net_export_rate> 
 					</substrate> 
+					<substrate name="oxygen">
+						<secretion_rate units="1/min">0</secretion_rate>
+						<secretion_target units="substrate density">1</secretion_target>
+						<uptake_rate units="1/min">0.05</uptake_rate>
+						<net_export_rate units="total substrate/min">0</net_export_rate> 
+					</substrate> 
+                    <substrate name="glucose">
+						<secretion_rate units="1/min">0</secretion_rate>
+						<secretion_target units="substrate density">1</secretion_target>
+						<uptake_rate units="1/min">0.01</uptake_rate>
+						<net_export_rate units="total substrate/min">0</net_export_rate> 
+					</substrate> 
 				</secretion>
-
-				<molecular />
 			</phenotype>
-			<custom_data>  
-				<sample units="dimensionless">1.0</sample>
-			</custom_data>
 		</cell_definition>
 	</cell_definitions>
 	
@@ -330,7 +300,7 @@
 		<test_cell_seeding type="bool" units = "none">true</test_cell_seeding>
 		<fibroblast_seeding type="bool" units="none">false</fibroblast_seeding>
 		<organoid_cell_seeding type="bool" units="none">false</organoid_cell_seeding>
-		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">1</number_of_cells>
+		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">170278</number_of_cells>
 	</user_parameters>
 	
 </PhysiCell_settings>

@@ -11,9 +11,9 @@
 		</software>
 		<citation />
 		<current_time units="min">0.300000</current_time>
-		<current_runtime units="sec">4.354107</current_runtime>
-		<created>2021-09-18T02:52:29Z</created>
-		<last_modified>2021-09-18T02:52:29Z</last_modified>
+		<current_runtime units="sec">5.583128</current_runtime>
+		<created>2021-09-27T12:57:00Z</created>
+		<last_modified>2021-09-27T12:57:00Z</last_modified>
 	</metadata>
 	<microenvironment>
 		<domain name="microenvironment">
@@ -27,24 +27,24 @@
 				</voxels>
 			</mesh>
 			<variables>
-				<variable name="chemokine" units="dimensionless" ID="0">
-					<physical_parameter_set>
-						<conditions />
-						<diffusion_coefficient units="micron^2/min">100000.000000</diffusion_coefficient>
-						<decay_rate units="1/min">10.000000</decay_rate>
-					</physical_parameter_set>
-				</variable>
-				<variable name="oxygen" units="mmHg" ID="1">
+				<variable name="oxygen" units="mmHg" ID="0">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">108000.000000</diffusion_coefficient>
 						<decay_rate units="1/min">0.000000</decay_rate>
 					</physical_parameter_set>
 				</variable>
-				<variable name="glucose" units="mMolar" ID="2">
+				<variable name="glucose" units="mMolar" ID="1">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">30000.000000</diffusion_coefficient>
+						<decay_rate units="1/min">0.000000</decay_rate>
+					</physical_parameter_set>
+				</variable>
+				<variable name="chemokine" units="dimensionless" ID="2">
+					<physical_parameter_set>
+						<conditions />
+						<diffusion_coefficient units="micron^2/min">100000.000000</diffusion_coefficient>
 						<decay_rate units="1/min">0.000000</decay_rate>
 					</physical_parameter_set>
 				</variable>
@@ -82,7 +82,6 @@
 							<label index="22" size="3">motility_bias_direction</label>
 							<label index="25" size="1">persistence_time</label>
 							<label index="26" size="1">motility_reserved</label>
-							<label index="27" size="1">sample</label>
 						</labels>
 						<filename>output00000003_cells_physicell.mat</filename>
 					</simplified_data>

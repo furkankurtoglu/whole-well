@@ -150,7 +150,7 @@ void setup_tissue( void )
 	}
 	
 	double Xrange = Xmax - Xmin; 
-	double Yrange = Ymax - Ymin; 
+	double Yrange = 256 - Ymin; 
 	double Zrange = Zmax - Zmin; 
 	
 	// create some of each type of cell 

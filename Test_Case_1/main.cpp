@@ -114,50 +114,67 @@ int main( int argc, char* argv[] )
 	/* Microenvironment setup */ 
 	
 	setup_microenvironment(); // modify this in the custom code 
-    
-    // START -------- 1D Microenvironment ------------- START //
-    
+	
     Microenvironment coarse_well;
-    Microenvironment old_coarse_well;
-    Microenvironment new_coarse_well;
-    
-    coarse_well.name = "coarse well";
+    coarse_well.name = "coarse_well";
     coarse_well.spatial_units = "micron";
     coarse_well.mesh.units = "micron";
     coarse_well.time_units = "min";
-
-    coarse_well.set_density( 0 , "oxygen", "mmHg", 1e5 , 0.00 );
-    coarse_well.add_density( "glucose", "mM", 3e4 , 0.0 );
-    coarse_well.add_density( "glutamine", "mM", 3e4 , 0.0);
-    coarse_well.add_density( "lactate", "mM", 3e4 , 0.0 );
+    
+    coarse_well.set_density( 0 , "oxygen", "mmHg", 108000 , 0.00 );
+    coarse_well.add_density( "glucose", "mM", 30000 , 0.0 );
+    coarse_well.add_density( "chemokine", "mM", 100000 , 0.0);
     coarse_well.resize_space( 100, 1 , 1 );
     
     double dx = 32;
-    coarse_well.resize_space_uniform( -512.0, 10208.0 , -dx/2.0 , dx/2.0 , -dx/2.0 , dx/2.0 , dx );
-    std::vector<double> dirichlet_condition = { 38 , 0, 0, 0 };
+    double dy = 2880;
+    double dz = 2880;
     
-    int my_voxel_index = 319;
+    coarse_well.resize_space( 256.0, 5104.0 , -dy/2.0+16 , dy/2.0+16 , -dz/2.0+16 , dz/2.0+16 , dx, dy, dz );
+    std::vector<double> dirichlet_condition = { 0 , 0, 0, 0 };
+
+    coarse_well.set_substrate_dirichlet_activation(0,false);
     coarse_well.set_substrate_dirichlet_activation(1,false);
     coarse_well.set_substrate_dirichlet_activation(2,false);
-    coarse_well.set_substrate_dirichlet_activation(3,false);
-
     
-    my_voxel_index = coarse_well.mesh.voxels.size()-1;
-    coarse_well.add_dirichlet_node( my_voxel_index , dirichlet_condition );
-    coarse_well.diffusion_decay_solver = diffusion_decay_solver__constant_coefficients_LOD_1D;
+    coarse_well.diffusion_decay_solver = diffusion_decay_solver__constant_coefficients_LOD_1D;   
     
     for ( int m = 0; m < coarse_well.mesh.voxels.size() ; m++)
     {
         coarse_well(m)[0]=38; // oxygen
         coarse_well(m)[1]=16.897255; // glucose
-        coarse_well(m)[2]=5.40;
-        coarse_well(m)[3]=0; // lactate
-        //std::cout<< "turned" << std::endl;
+        coarse_well(m)[2]=0; //chemokine
     }
     
     coarse_well.display_information( std::cout );
     coarse_well.write_to_matlab("output/output00000000_microenvironment1.mat");
-	
+    
+    
+    Microenvironment transfer_region;
+    transfer_region.name = "transfer_region";
+    transfer_region.spatial_units = "micron";
+    transfer_region.mesh.units = "micron";
+    transfer_region.time_units = "min";
+    
+    transfer_region.set_density( 0 , "oxygen", "mmHg", 108000 , 0.00 );
+    transfer_region.add_density( "glucose", "mM", 30000 , 0.0 );
+    transfer_region.add_density( "chemokine", "mM", 100000 , 0.0);
+    transfer_region.resize_space( 100, 1 , 1 );
+    transfer_region.resize_space( 224.0, 288.0 , -dy/2.0+16 , dy/2.0+16 , -dz/2.0+16 , dz/2.0+16 , dx, dy, dz );
+    
+    transfer_region.diffusion_decay_solver = diffusion_decay_solver__constant_coefficients_LOD_1D;   
+    
+    for ( int m = 0; m < transfer_region.mesh.voxels.size() ; m++)
+    {
+        transfer_region(m)[0]=38; // oxygen
+        transfer_region(m)[1]=16.897255; // glucose
+        transfer_region(m)[2]=0; //chemokine
+    }
+    
+    transfer_region.display_information( std::cout );
+    transfer_region.write_to_matlab("output/output00000000_microenvironment2.mat");    
+    
+    
 	/* PhysiCell setup */ 
  	
 	// set mechanics voxel size, and match the data structure to BioFVM
@@ -217,13 +234,18 @@ int main( int argc, char* argv[] )
 	}
 	
 	// main loop 
-	
+    
+    std::vector<double> v = { 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 , 20.0 };
+	int i = 0;
+    int j = 0;
 	try 
 	{		
+        
 		while( PhysiCell_globals.current_time < PhysiCell_settings.max_time + 0.1*diffusion_dt )
 		{
+            //std::cout << "NEXT TIME WILL BE SAVED AT : " << v[i] << std::endl;
 			// save data if it's time. 
-			if( fabs( PhysiCell_globals.current_time - PhysiCell_globals.next_full_save_time ) < 0.01 * diffusion_dt )
+			if( fabs( PhysiCell_globals.current_time - v[i] ) < 0.01 * diffusion_dt )
 			{
 				display_simulation_status( std::cout ); 
 				if( PhysiCell_settings.enable_legacy_saves == true )
@@ -236,14 +258,21 @@ int main( int argc, char* argv[] )
 					sprintf( filename , "%s/output%08u" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index ); 
 					
 					save_PhysiCell_to_MultiCellDS_xml_pugi( filename , microenvironment , PhysiCell_globals.current_time ); 
+                    
+                    sprintf( filename , "%s/output%08u_microenvironment1.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+                    coarse_well.write_to_matlab(filename);
+                    
+                    sprintf( filename , "%s/output%08u_microenvironment2.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+                    transfer_region.write_to_matlab(filename);
 				}
 				
 				PhysiCell_globals.full_output_index++; 
 				PhysiCell_globals.next_full_save_time += PhysiCell_settings.full_save_interval;
+                i += 1; 
 			}
 			
 			// save SVG plot if it's time
-			if( fabs( PhysiCell_globals.current_time - PhysiCell_globals.next_SVG_save_time  ) < 0.01 * diffusion_dt )
+			if( fabs( PhysiCell_globals.current_time - v[j]  ) < 0.01 * diffusion_dt )
 			{
 				if( PhysiCell_settings.enable_SVG_saves == true )
 				{	
@@ -252,11 +281,56 @@ int main( int argc, char* argv[] )
 					
 					PhysiCell_globals.SVG_output_index++; 
 					PhysiCell_globals.next_SVG_save_time  += PhysiCell_settings.SVG_save_interval;
+                    j += 1;
 				}
 			}
 
 			// update the microenvironment
 			microenvironment.simulate_diffusion_decay( diffusion_dt );
+            coarse_well.simulate_diffusion_decay(diffusion_dt);
+            
+            
+            // coarsening (transfer_region right hand_side)
+            std::vector<double> v = {0, 0, 0};
+            for ( int m = 0; m < microenvironment.mesh.voxels.size() ; m++)
+            {
+                double mic_cen_y = microenvironment.mesh.voxels[m].center[1];
+                if (mic_cen_y == 240)
+                { 
+                    v[0]+=microenvironment(m)[0]*microenvironment.mesh.voxels[m].volume; //oxygen
+                    v[1]+=microenvironment(m)[1]*microenvironment.mesh.voxels[m].volume; //glucose
+                    v[2]+=microenvironment(m)[2]*microenvironment.mesh.voxels[m].volume; //chemokine
+                }
+            }
+            v[0]=v[0]/transfer_region.mesh.voxels[1].volume;
+            v[1]=v[2]/transfer_region.mesh.voxels[1].volume;
+            v[2]=v[2]/transfer_region.mesh.voxels[1].volume;
+            
+            transfer_region(0)[0]=v[0]; // oxygen
+            transfer_region(0)[1]=v[1]; // glucose
+            transfer_region(0)[2]=v[2]; // chemokine
+
+            //transfer_region left hand_side
+            transfer_region(1)[0]=coarse_well(0)[0]; //oxygen
+            transfer_region(1)[1]=coarse_well(0)[1]; //glucose
+            transfer_region(1)[2]=coarse_well(0)[2]; //chemokine
+            
+            std::vector<double> right_side_before_diffusion = {transfer_region(0)[0], transfer_region(0)[1], transfer_region(0)[2]};
+            std::vector<double> left_side_before_diffusion = {transfer_region(1)[0], transfer_region(1)[1], transfer_region(1)[2]};
+            
+            transfer_region.simulate_diffusion_decay(diffusion_dt);
+            
+            std::vector<double> right_side_after_diffusion = {transfer_region(0)[0], transfer_region(0)[1], transfer_region(0)[2]};
+            std::vector<double> left_side_after_diffusion = {transfer_region(1)[0], transfer_region(1)[1], transfer_region(1)[2]};
+            
+            // left side overwrite
+            coarse_well(0)[0] += left_side_after_diffusion[0] - left_side_before_diffusion[0];
+            coarse_well(0)[1] += left_side_after_diffusion[1] - left_side_before_diffusion[1];
+            coarse_well(0)[2] += left_side_after_diffusion[2] - left_side_before_diffusion[2];
+            
+            // right side overwrite
+            
+            
 			
 			// run PhysiCell 
 			((Cell_Container *)microenvironment.agent_container)->update_all_cells( PhysiCell_globals.current_time );
@@ -266,6 +340,7 @@ int main( int argc, char* argv[] )
 			*/
 			
 			PhysiCell_globals.current_time += diffusion_dt;
+            
 		}
 		
 		if( PhysiCell_settings.enable_legacy_saves == true )
@@ -291,6 +366,7 @@ int main( int argc, char* argv[] )
 	
 	std::cout << std::endl << "Total simulation runtime: " << std::endl; 
 	BioFVM::display_stopwatch_value( std::cout , BioFVM::runtime_stopwatch_value() ); 
+
 
 	return 0; 
 }

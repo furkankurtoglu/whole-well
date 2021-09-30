@@ -121,9 +121,9 @@ int main( int argc, char* argv[] )
     coarse_well.mesh.units = "micron";
     coarse_well.time_units = "min";
     
-    coarse_well.set_density( 0 , "oxygen", "mmHg", 108000 , 0.00 );
+    coarse_well.set_density( 0 , "oxygen", "mM", 108000 , 0.00 );
     coarse_well.add_density( "glucose", "mM", 30000 , 0.0 );
-    coarse_well.add_density( "chemokine", "mM", 100000 , 0.0);
+    coarse_well.add_density( "chemokine", "mM", 40000 , 0.0);
     coarse_well.resize_space( 100, 1 , 1 );
     
     double dx = 32;
@@ -131,7 +131,7 @@ int main( int argc, char* argv[] )
     double dz = 2880;
     
     coarse_well.resize_space( 256.0, 5104.0 , -dy/2.0+16 , dy/2.0+16 , -dz/2.0+16 , dz/2.0+16 , dx, dy, dz );
-    std::vector<double> dirichlet_condition = { 0 , 0, 0, 0 };
+    std::vector<double> dirichlet_condition = { 0 , 0, 0 };
 
     coarse_well.set_substrate_dirichlet_activation(0,false);
     coarse_well.set_substrate_dirichlet_activation(1,false);
@@ -139,9 +139,11 @@ int main( int argc, char* argv[] )
     
     coarse_well.diffusion_decay_solver = diffusion_decay_solver__constant_coefficients_LOD_1D;   
     
-    for ( int m = 0; m < coarse_well.mesh.voxels.size() ; m++)
+    int coarse_well_voxel_number = coarse_well.mesh.voxels.size();
+    
+    for ( int m = 0; m < coarse_well_voxel_number ; m++)
     {
-        coarse_well(m)[0]=38; // oxygen
+        coarse_well(m)[0]=0.285; // oxygen
         coarse_well(m)[1]=16.897255; // glucose
         coarse_well(m)[2]=0; //chemokine
     }
@@ -158,7 +160,7 @@ int main( int argc, char* argv[] )
     
     transfer_region.set_density( 0 , "oxygen", "mmHg", 108000 , 0.00 );
     transfer_region.add_density( "glucose", "mM", 30000 , 0.0 );
-    transfer_region.add_density( "chemokine", "mM", 100000 , 0.0);
+    transfer_region.add_density( "chemokine", "mM", 40000 , 0.0);
     transfer_region.resize_space( 100, 1 , 1 );
     transfer_region.resize_space( 224.0, 288.0 , -dy/2.0+16 , dy/2.0+16 , -dz/2.0+16 , dz/2.0+16 , dx, dy, dz );
     
@@ -166,7 +168,7 @@ int main( int argc, char* argv[] )
     
     for ( int m = 0; m < transfer_region.mesh.voxels.size() ; m++)
     {
-        transfer_region(m)[0]=38; // oxygen
+        transfer_region(m)[0]=0.285; // oxygen
         transfer_region(m)[1]=16.897255; // glucose
         transfer_region(m)[2]=0; //chemokine
     }
@@ -178,7 +180,7 @@ int main( int argc, char* argv[] )
 	/* PhysiCell setup */ 
  	
 	// set mechanics voxel size, and match the data structure to BioFVM
-	double mechanics_voxel_size = 30; 
+	double mechanics_voxel_size = 32; 
 	Cell_Container* cell_container = create_cell_container_for_microenvironment( microenvironment, mechanics_voxel_size );
 	
 	/* Users typically start modifying here. START USERMODS */ 
@@ -292,6 +294,7 @@ int main( int argc, char* argv[] )
             
             // coarsening (transfer_region right hand_side)
             std::vector<double> v = {0, 0, 0};
+            int y_240 = 0;
             for ( int m = 0; m < microenvironment.mesh.voxels.size() ; m++)
             {
                 double mic_cen_y = microenvironment.mesh.voxels[m].center[1];
@@ -300,10 +303,11 @@ int main( int argc, char* argv[] )
                     v[0]+=microenvironment(m)[0]*microenvironment.mesh.voxels[m].volume; //oxygen
                     v[1]+=microenvironment(m)[1]*microenvironment.mesh.voxels[m].volume; //glucose
                     v[2]+=microenvironment(m)[2]*microenvironment.mesh.voxels[m].volume; //chemokine
+                    y_240 += 1;
                 }
             }
             v[0]=v[0]/transfer_region.mesh.voxels[1].volume;
-            v[1]=v[2]/transfer_region.mesh.voxels[1].volume;
+            v[1]=v[1]/transfer_region.mesh.voxels[1].volume;
             v[2]=v[2]/transfer_region.mesh.voxels[1].volume;
             
             transfer_region(0)[0]=v[0]; // oxygen
@@ -320,6 +324,7 @@ int main( int argc, char* argv[] )
             
             transfer_region.simulate_diffusion_decay(diffusion_dt);
             
+            
             std::vector<double> right_side_after_diffusion = {transfer_region(0)[0], transfer_region(0)[1], transfer_region(0)[2]};
             std::vector<double> left_side_after_diffusion = {transfer_region(1)[0], transfer_region(1)[1], transfer_region(1)[2]};
             
@@ -327,14 +332,33 @@ int main( int argc, char* argv[] )
             coarse_well(0)[0] += left_side_after_diffusion[0] - left_side_before_diffusion[0];
             coarse_well(0)[1] += left_side_after_diffusion[1] - left_side_before_diffusion[1];
             coarse_well(0)[2] += left_side_after_diffusion[2] - left_side_before_diffusion[2];
+            // Dirichlet Boundary Condition
+            coarse_well(coarse_well_voxel_number-1)[0] = 0.285;
             
             // right side overwrite
-            
-            
+            //std::cout << y_240 << std::endl;
+            double oxy_diff = right_side_after_diffusion[0] - right_side_before_diffusion[0];
+            double glu_diff = right_side_after_diffusion[1] - right_side_before_diffusion[1];
+            double chem_diff = right_side_after_diffusion[2] - right_side_before_diffusion[2];
 			
+            for ( int m = 0; m < microenvironment.mesh.voxels.size() ; m++)
+            {
+                double mic_cen_y = microenvironment.mesh.voxels[m].center[1];
+                if (mic_cen_y == 240)
+                { 
+            
+                    //std::cout << "Glucose difference per voxel  : "  <<glu_diff/y_240 << std::endl; 
+                    microenvironment(m)[0] += oxy_diff/y_240; //oxygen
+                    microenvironment(m)[1] += glu_diff/y_240; //glucose
+                    microenvironment(m)[2] += chem_diff/y_240; //chemokine
+                }
+            }
+            
+            
 			// run PhysiCell 
 			((Cell_Container *)microenvironment.agent_container)->update_all_cells( PhysiCell_globals.current_time );
 			
+            
 			/*
 			  Custom add-ons could potentially go here. 
 			*/

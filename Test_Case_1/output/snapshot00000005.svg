@@ -449,8 +449,8 @@
   <circle cx="869.158" cy="455.745" r="4.59506" stroke-width="0.5" stroke="grey" fill="grey"/>
    </g>
    <g id="cell19406">
-  <circle cx="847.102" cy="384.447" r="7.92526" stroke-width="0.5" stroke="black" fill="grey"/>
-  <circle cx="847.102" cy="384.447" r="4.18991" stroke-width="0.5" stroke="grey" fill="grey"/>
+  <circle cx="847.102" cy="384.447" r="7.92527" stroke-width="0.5" stroke="black" fill="grey"/>
+  <circle cx="847.102" cy="384.447" r="4.18993" stroke-width="0.5" stroke="grey" fill="grey"/>
    </g>
    <g id="cell19464">
   <circle cx="1595.53" cy="169.205" r="5.40802" stroke-width="0.5" stroke="black" fill="grey"/>
@@ -1892,7 +1892,7 @@
   <circle cx="2853.82" cy="436.891" r="3.55667" stroke-width="0.5" stroke="black" fill="grey"/>
    </g>
    <g id="cell92391">
-  <circle cx="1121.42" cy="331.526" r="4.23562" stroke-width="0.5" stroke="black" fill="grey"/>
+  <circle cx="1121.42" cy="331.526" r="4.23531" stroke-width="0.5" stroke="black" fill="grey"/>
    </g>
    <g id="cell93103">
   <circle cx="2317.57" cy="42.0868" r="5.16853" stroke-width="0.5" stroke="black" fill="grey"/>
@@ -2345,7 +2345,7 @@
   <circle cx="2781.04" cy="144.762" r="4.89506" stroke-width="0.5" stroke="grey" fill="grey"/>
    </g>
    <g id="cell118798">
-  <circle cx="488.898" cy="370.109" r="4.30692" stroke-width="0.5" stroke="black" fill="grey"/>
+  <circle cx="488.897" cy="370.108" r="4.30724" stroke-width="0.5" stroke="black" fill="grey"/>
    </g>
    <g id="cell118892">
   <circle cx="756.932" cy="490.61" r="8.39642" stroke-width="0.5" stroke="black" fill="grey"/>
@@ -3419,7 +3419,7 @@
   </text>
   <text x="12.8" y="535.04"
    font-family="Arial" font-size="9.6" fill="black" >
-   0 days, 0 hours, 0 minutes, and 6.1032 seconds
+   0 days, 0 hours, 0 minutes, and 8.0747 seconds
   </text>
   <rect x="0" y="35.84" width="2880" height="512" stroke-width="1.024" stroke="rgb(0,0,0)" fill="none"/>
 </svg>

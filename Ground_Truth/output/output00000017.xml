@@ -11,9 +11,9 @@
 		</software>
 		<citation />
 		<current_time units="min">8.000000</current_time>
-		<current_runtime units="sec">91.897537</current_runtime>
-		<created>2021-09-27T12:58:27Z</created>
-		<last_modified>2021-09-27T12:58:27Z</last_modified>
+		<current_runtime units="sec">98.624514</current_runtime>
+		<created>2021-09-30T02:05:39Z</created>
+		<last_modified>2021-09-30T02:05:39Z</last_modified>
 	</metadata>
 	<microenvironment>
 		<domain name="microenvironment">
@@ -27,7 +27,7 @@
 				</voxels>
 			</mesh>
 			<variables>
-				<variable name="oxygen" units="mmHg" ID="0">
+				<variable name="oxygen" units="mMolar" ID="0">
 					<physical_parameter_set>
 						<conditions />
 						<diffusion_coefficient units="micron^2/min">108000.000000</diffusion_coefficient>
@@ -41,10 +41,10 @@
 						<decay_rate units="1/min">0.000000</decay_rate>
 					</physical_parameter_set>
 				</variable>
-				<variable name="chemokine" units="dimensionless" ID="2">
+				<variable name="chemokine" units="mMolar" ID="2">
 					<physical_parameter_set>
 						<conditions />
-						<diffusion_coefficient units="micron^2/min">100000.000000</diffusion_coefficient>
+						<diffusion_coefficient units="micron^2/min">40000.000000</diffusion_coefficient>
 						<decay_rate units="1/min">0.000000</decay_rate>
 					</physical_parameter_set>
 				</variable>

@@ -124,14 +124,14 @@
 	</options>	
 
 	<microenvironment_setup>
-		<variable name="oxygen" units="mmHg" ID="0">
+		<variable name="oxygen" units="mMolar" ID="0">
 			<physical_parameter_set>
 				<diffusion_coefficient units="micron^2/min">108000.0</diffusion_coefficient>
 				<decay_rate units="1/min">0.0</decay_rate> 
 			</physical_parameter_set>
-			<initial_condition units="mmHg">38.0</initial_condition>
-			<Dirichlet_boundary_condition units="mmHg" enabled="false">38.0</Dirichlet_boundary_condition>
-                <boundary_value ID="ymax" enabled="true">38.0</boundary_value>
+			<initial_condition units="mMolar">0.285</initial_condition>
+			<Dirichlet_boundary_condition units="mMolar" enabled="false">0.285</Dirichlet_boundary_condition>
+                <boundary_value ID="ymax" enabled="false">0.0</boundary_value>
 		</variable>
 		
 		<variable name="glucose" units="mMolar" ID="1">
@@ -141,16 +141,15 @@
 			</physical_parameter_set>
 			<initial_condition units="molar">16.897255</initial_condition>
 			<Dirichlet_boundary_condition units="molar" enabled="false">0.0</Dirichlet_boundary_condition>
-                <boundary_value ID="ymax" enabled="true">16.897255</boundary_value>
 		</variable>
         
-        <variable name="chemokine" units="dimensionless" ID="2">
+        <variable name="chemokine" units="mMolar" ID="2">
 			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
+				<diffusion_coefficient units="micron^2/min">40000.0</diffusion_coefficient>
 				<decay_rate units="1/min">0.0</decay_rate>  
 			</physical_parameter_set>
-			<initial_condition units="mmHg">0</initial_condition>
-			<Dirichlet_boundary_condition units="mmHg" enabled="true">0</Dirichlet_boundary_condition>
+			<initial_condition units="mMolar">0</initial_condition>
+			<Dirichlet_boundary_condition units="mMolar" enabled="false">0</Dirichlet_boundary_condition>
 		</variable>
         
 		<options>
@@ -271,7 +270,7 @@
 					<substrate name="oxygen">
 						<secretion_rate units="1/min">0</secretion_rate>
 						<secretion_target units="substrate density">1</secretion_target>
-						<uptake_rate units="1/min">0.05</uptake_rate>
+						<uptake_rate units="1/min">0.005</uptake_rate>
 						<net_export_rate units="total substrate/min">0</net_export_rate> 
 					</substrate> 
                     <substrate name="glucose">

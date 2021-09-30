@@ -99,10 +99,10 @@ ft, ct, tt = data_parser(tp)
 fine_X, fine_Y, fine_oxy = ft[0]
 zmin = min([min(zl) for zl in fine_oxy])
 zmax = max([max(zl) for zl in fine_oxy])
-levels = np.linspace(zmin, 38,41)
-kw = dict(levels=levels, vmin=zmin, vmax=38.000, origin='lower')
+levels = np.linspace(zmin, 0.28500001,41)
+kw = dict(levels=levels, vmin=zmin, vmax=0.28500001, origin='lower')
 cp = axs.contourf(fine_Y,fine_X,fine_oxy, **kw)
-cbar = plt.colorbar(cp,format='%0.2f')
+cbar = plt.colorbar(cp,format='%0.4f')
 axs.clear()
 
 
@@ -197,6 +197,7 @@ ani3 = matplotlib.animation.FuncAnimation(fig3,animate3,blit=False, frames=numbe
 plt.show()
 
 ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
+
 #%% Temporal Plot
 
 # fig, axs = plt.subplots()

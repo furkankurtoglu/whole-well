@@ -143,11 +143,6 @@ void setup_tissue( void )
 	double Ymax = microenvironment.mesh.bounding_box[4]; 
 	double Zmax = microenvironment.mesh.bounding_box[5]; 
 	
-	if( default_microenvironment_options.simulate_2D == true )
-	{
-		Zmin = 0.0; 
-		Zmax = 0.0; 
-	}
 	
 	double Xrange = Xmax - Xmin; 
 	double Yrange = 256 - Ymin; 
@@ -193,6 +188,31 @@ void setup_tissue( void )
 	return; 
 }
 
+void mechanical_stabilization (double dt)
+{
+    std::cout << "Mechanic Stabilization Started" << std::endl;
+    
+    for (int k=0; k < 1000; k++)
+    {
+        #pragma omp parallel for 
+        for( int i=0; i < (*all_cells).size(); i++ )
+        {
+            Cell* pC = (*all_cells)[i]; 
+            if( pC->functions.update_velocity && pC->is_out_of_domain == false && pC->is_movable )
+                { pC->functions.update_velocity( pC,pC->phenotype,dt ); }
+        }
+        
+        #pragma omp parallel for 
+        for( int i=0; i < (*all_cells).size(); i++ )
+        {
+            Cell* pC = (*all_cells)[i]; 
+            if( pC->is_out_of_domain == false && pC->is_movable)
+                { pC->update_position(dt); }
+    }
+    }
+    std::cout << "Mechanic Stabilization Ended" << std::endl;
+}
+
 std::vector<std::string> my_coloring_function( Cell* pCell )
 { return paint_by_number_cell_coloring(pCell); }
 
@@ -204,3 +224,4 @@ void custom_function( Cell* pCell, Phenotype& phenotype , double dt )
 
 void contact_function( Cell* pMe, Phenotype& phenoMe , Cell* pOther, Phenotype& phenoOther , double dt )
 { return; } 
+

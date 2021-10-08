@@ -105,12 +105,12 @@
 
 		<full_data> <!-- This part is obsolete since there is a special time intervals defined in main.cpp --> 
 			<interval units="min">1</interval>
-			<enable>true</enable>
+			<enable>false</enable>
 		</full_data>
 		
 		<SVG>
 			<interval units="min">1</interval>
-			<enable>true</enable>
+			<enable>false</enable>
 		</SVG>
 		
 		<legacy_data>

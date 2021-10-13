@@ -219,9 +219,15 @@ int main( int argc, char* argv[] )
                     j += 1;
 				}
 			}
-
+			
 			// update the microenvironment
+			sprintf( filename , "%s/output%08u_microenvironment0_before_secretion.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			microenvironment.write_to_matlab(filename);
+			
 			microenvironment.simulate_diffusion_decay( diffusion_dt );
+			
+			sprintf( filename , "%s/output%08u_microenvironment0_after_secretion.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			microenvironment.write_to_matlab(filename);
 			
 			// run PhysiCell 
 			((Cell_Container *)microenvironment.agent_container)->update_all_cells( PhysiCell_globals.current_time );

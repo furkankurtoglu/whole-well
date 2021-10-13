@@ -285,10 +285,13 @@ int main( int argc, char* argv[] )
 				}
 			}
 
+			sprintf( filename , "%s/output%08u_microenvironment0_before_diffusion.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			microenvironment.write_to_matlab(filename);
 			// update the microenvironment
 			microenvironment.simulate_diffusion_decay( diffusion_dt );
             
-            
+			sprintf( filename , "%s/output%08u_microenvironment0_after_diffusion.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			microenvironment.write_to_matlab(filename);
             
             // coarsening (transfer_region right hand_side)
             std::vector<double> v = {0, 0, 0};
@@ -307,20 +310,33 @@ int main( int argc, char* argv[] )
             v[2]=v[2]/coarse_well.mesh.voxels[0].volume;
 
 			std::vector<double> fine_overlap = {v[0], v[1], v[2]};
-            
+
+			sprintf( filename , "%s/output%08u_microenvironment1_before_coarsening.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			coarse_well.write_to_matlab(filename);
+			
+			
 			coarse_well(0)[0] = v[0];
             coarse_well(0)[1] = v[1];
             coarse_well(0)[2] = v[2];
+			
+			sprintf( filename , "%s/output%08u_microenvironment1_after_coarsening.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			coarse_well.write_to_matlab(filename);
             
 			std::vector<double> coarse_overlap_before_diffusion = {coarse_well(0)[0], coarse_well(0)[1], coarse_well(0)[2]};
 
             coarse_well.simulate_diffusion_decay(diffusion_dt);
+			
+			sprintf( filename , "%s/output%08u_microenvironment1_after_diffusion.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			coarse_well.write_to_matlab(filename);
             
 			int coarse_well_voxel_number = coarse_well.mesh.voxels.size();
             // Dirichlet Boundary Condition
             coarse_well(coarse_well_voxel_number-1)[0] = 0.285;
             int y_240 = 0;
 			std::vector<double> coarse_overlap_after_diffusion = {coarse_well(0)[0], coarse_well(0)[1], coarse_well(0)[2]};
+
+			sprintf( filename , "%s/output%08u_microenvironment1_after_diffusion_with_DC.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			coarse_well.write_to_matlab(filename);
 
             // right side overwrite
             //std::cout << y_240 << std::endl;
@@ -340,6 +356,10 @@ int main( int argc, char* argv[] )
                     microenvironment(m)[2] += chem_diff/y_240; //chemokine
                 }
             }
+			
+			
+			sprintf( filename , "%s/output%08u_microenvironment0_after_projection.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			microenvironment.write_to_matlab(filename);
 			// run PhysiCell 
 			((Cell_Container *)microenvironment.agent_container)->update_all_cells( PhysiCell_globals.current_time );
 			

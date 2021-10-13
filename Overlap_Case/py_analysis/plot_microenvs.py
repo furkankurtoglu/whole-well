@@ -22,7 +22,7 @@ import pandas as pd
 #from fury import window, actor, utils, primitive, io, ui
 #from fury.data import read_viz_textures, fetch_viz_textures
 import itertools
-import vtk
+# import vtk
 import glob
 import time
 import random
@@ -41,8 +41,8 @@ os.chdir(out_path)
 time_point = "output000000"
 number_of_frames = len(saving_times)
 
-Temporospatial_Plotting = 'Y'
-Total_Amount_Analysis = 'N'
+Temporospatial_Plotting = 'N'
+Total_Amount_Analysis = 'Y'
 
 
 

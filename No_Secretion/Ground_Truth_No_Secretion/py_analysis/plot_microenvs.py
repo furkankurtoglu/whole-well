@@ -100,8 +100,8 @@ if Temporospatial_Plotting == 'Y':
     fine_X, fine_Y, fine_oxy = ft[0]
     zmin = min([min(zl) for zl in fine_oxy])
     zmax = max([max(zl) for zl in fine_oxy])
-    levels = np.linspace(zmin, 0.28500001,41)
-    kw = dict(levels=levels, vmin=zmin, vmax=0.28500001, origin='lower')
+    levels = np.linspace(0, 0.28500001,41)
+    kw = dict(levels=levels, vmin=0.0, vmax=0.28500001, origin='lower')
     cp = axs.contourf(fine_Y,fine_X,fine_oxy, **kw)
     cbar = plt.colorbar(cp,format='%0.4f')
     axs.clear()
@@ -138,8 +138,8 @@ if Temporospatial_Plotting == 'Y':
     fine_X, fine_Y, fine_glu = ft[1]
     zmin2 = min([min(zl) for zl in fine_glu])
     zmax2 = max([max(zl) for zl in fine_glu])
-    levels2 = np.linspace(zmin2, 16.897255)
-    kw2 = dict(levels=levels2, vmin=zmin2, vmax=16.897255, origin='lower')
+    levels2 = np.linspace(0, 16.897255)
+    kw2 = dict(levels=levels2, vmin=0, vmax=16.897255, origin='lower')
     cp2 = ax.contourf(fine_Y,fine_X,fine_glu, **kw2)
     cbar2 = plt.colorbar(cp2,format='%0.2f')
     ax.clear()
@@ -167,37 +167,37 @@ if Temporospatial_Plotting == 'Y':
     
     
     
-    fig3, ax3 = plt.subplots()
+    # fig3, ax3 = plt.subplots()
     
-    # color bar
-    tp = "final"
-    ft, ct, tt = data_parser(tp)
-    fine_X, fine_Y, fine_chem = ft[2]
-    zmin3 = min([min(zl) for zl in fine_chem])
-    zmax3 = max([max(zl) for zl in fine_chem])
-    levels3 = np.linspace(0, zmax3)
-    kw3 = dict(levels=levels3, vmin=0, vmax=zmax3, origin='lower')
-    cp3 = ax3.contourf(fine_Y,fine_X,fine_chem, **kw3)
-    cbar3 = plt.colorbar(cp3,format='%0.5f')
-    ax3.clear()
+    # # color bar
+    # tp = "final"
+    # ft, ct, tt = data_parser(tp)
+    # fine_X, fine_Y, fine_chem = ft[2]
+    # zmin3 = min([min(zl) for zl in fine_chem])
+    # zmax3 = max([max(zl) for zl in fine_chem])
+    # levels3 = np.linspace(0, zmax3)
+    # kw3 = dict(levels=levels3, vmin=0, vmax=zmax3, origin='lower')
+    # cp3 = ax3.contourf(fine_Y,fine_X,fine_chem, **kw3)
+    # cbar3 = plt.colorbar(cp3,format='%0.5f')
+    # ax3.clear()
     
-    def animate3(i):
-        time_p= time_point + '%02d'%(i)
-        ft, ct, tt = data_parser(time_p)
-        fine_X, fine_Y, fine_chem = ft[2]
-        ax3.clear()
-        ax3.contourf(fine_Y,fine_X,fine_chem, **kw3)
-        ax3.set_title('Chemokine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
-        ax3.invert_xaxis()
-        ax3.axis('scaled')
+    # def animate3(i):
+    #     time_p= time_point + '%02d'%(i)
+    #     ft, ct, tt = data_parser(time_p)
+    #     fine_X, fine_Y, fine_chem = ft[2]
+    #     ax3.clear()
+    #     ax3.contourf(fine_Y,fine_X,fine_chem, **kw3)
+    #     ax3.set_title('Chemokine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+    #     ax3.invert_xaxis()
+    #     ax3.axis('scaled')
         
     
     
-    ani3 = matplotlib.animation.FuncAnimation(fig3,animate3,blit=False, frames=number_of_frames,repeat=False)
+    # ani3 = matplotlib.animation.FuncAnimation(fig3,animate3,blit=False, frames=number_of_frames,repeat=False)
     
-    plt.show()
+    # plt.show()
     
-    ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
+    # ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
     
 
 

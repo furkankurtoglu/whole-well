@@ -129,6 +129,21 @@ void setup_microenvironment( void )
 	// initialize BioFVM 
 	
 	initialize_microenvironment(); 	
+    
+    for( int n = 0; n < microenvironment.mesh.voxels.size() ; n++ )
+	{
+        std::vector<double> position = microenvironment.mesh.voxels[n].center; 
+        
+        if( position[1] < 230  )
+            {	
+				microenvironment(n)[0] = 0.0;
+                microenvironment(n)[1] = 0.0;
+                microenvironment(n)[2] = 0.0;
+            }
+	}
+		microenvironment.set_substrate_dirichlet_activation(1,false);
+		microenvironment.set_substrate_dirichlet_activation(2,false);
+			
 	
 	return; 
 }

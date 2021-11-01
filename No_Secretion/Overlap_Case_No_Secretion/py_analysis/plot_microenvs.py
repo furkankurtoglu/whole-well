@@ -116,8 +116,8 @@ if Temporospatial_Plotting == 'Y':
     w_O = np.concatenate((fine_oxy,cOxy),axis=0)
     zmin = min([min(zl) for zl in w_O])
     zmax = max([max(zl) for zl in w_O])
-    levels = np.linspace(zmin, 0.28500001,41)
-    kw = dict(levels=levels, vmin=zmin, vmax=0.28500001, origin='lower')
+    levels = np.linspace(0, 0.28500001,41)
+    kw = dict(levels=levels, vmin=0, vmax=0.28500001, origin='lower')
     cp = axs.contourf(w_Y,w_X,w_O, **kw)
     cbar = plt.colorbar(cp,format='%0.4f')
     axs.clear()
@@ -163,8 +163,8 @@ if Temporospatial_Plotting == 'Y':
     w_G = np.concatenate((fine_glu,cGlu),axis=0)
     zmin2 = min([min(zl) for zl in w_G])
     zmax2 = max([max(zl) for zl in w_G])
-    levels2 = np.linspace(zmin2, 16.897255)
-    kw2 = dict(levels=levels2, vmin=zmin2, vmax=16.897255, origin='lower')
+    levels2 = np.linspace(0, 16.897255)
+    kw2 = dict(levels=levels2, vmin=0, vmax=16.897255, origin='lower')
     cp2 = ax.contourf(w_X,w_Y,w_G, **kw2)
     cbar2 = plt.colorbar(cp2,format='%0.2f')
     ax.clear()
@@ -196,45 +196,45 @@ if Temporospatial_Plotting == 'Y':
     
     
     
-    fig3, ax3 = plt.subplots()
+    # fig3, ax3 = plt.subplots()
     
-    # color bar
-    tp = "output00000020"
-    ft, ct, tt = data_parser(tp)
-    fine_X, fine_Y, fine_chem = ft[2]
-    cX, cY, cOxy, cGlu, cChem = ct
-    w_X = np.concatenate((fine_X,cX),axis=0)
-    w_Y = np.concatenate((fine_Y,cY),axis=0)
-    w_C = np.concatenate((fine_chem,cChem),axis=0)
-    zmin3 = min([min(zl) for zl in w_C])
-    zmax3 = max([max(zl) for zl in w_C])
-    levels3 = np.linspace(0, zmax3)
-    kw3 = dict(levels=levels3, vmin=0, vmax=zmax3, origin='lower')
-    cp3 = ax3.contourf(w_X,w_Y,w_C, **kw3)
-    cbar3 = plt.colorbar(cp3,format='%0.5f')
-    ax3.clear()
+    # # color bar
+    # tp = "output00000020"
+    # ft, ct, tt = data_parser(tp)
+    # fine_X, fine_Y, fine_chem = ft[2]
+    # cX, cY, cOxy, cGlu, cChem = ct
+    # w_X = np.concatenate((fine_X,cX),axis=0)
+    # w_Y = np.concatenate((fine_Y,cY),axis=0)
+    # w_C = np.concatenate((fine_chem,cChem),axis=0)
+    # zmin3 = min([min(zl) for zl in w_C])
+    # zmax3 = max([max(zl) for zl in w_C])
+    # levels3 = np.linspace(0, zmax3)
+    # kw3 = dict(levels=levels3, vmin=0, vmax=zmax3, origin='lower')
+    # cp3 = ax3.contourf(w_X,w_Y,w_C, **kw3)
+    # cbar3 = plt.colorbar(cp3,format='%0.5f')
+    # ax3.clear()
     
-    def animate3(i):
-        time_p= time_point + '%02d'%(i)
-        ft, ct, tt = data_parser(time_p)
-        fine_X, fine_Y, fine_chem = ft[2]
-        cX, cY, cOxy, cGlu, cChem = ct
-        w_X = np.concatenate((fine_X,cX),axis=0)
-        w_Y = np.concatenate((fine_Y,cY),axis=0)
-        w_C = np.concatenate((fine_chem,cChem),axis=0)
-        ax3.clear()
-        ax3.contourf(w_Y,w_X,w_C, **kw3)
-        ax3.set_title('Chemokine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
-        ax3.invert_xaxis()
-        ax3.axis('scaled')
+    # def animate3(i):
+    #     time_p= time_point + '%02d'%(i)
+    #     ft, ct, tt = data_parser(time_p)
+    #     fine_X, fine_Y, fine_chem = ft[2]
+    #     cX, cY, cOxy, cGlu, cChem = ct
+    #     w_X = np.concatenate((fine_X,cX),axis=0)
+    #     w_Y = np.concatenate((fine_Y,cY),axis=0)
+    #     w_C = np.concatenate((fine_chem,cChem),axis=0)
+    #     ax3.clear()
+    #     ax3.contourf(w_Y,w_X,w_C, **kw3)
+    #     ax3.set_title('Chemokine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+    #     ax3.invert_xaxis()
+    #     ax3.axis('scaled')
         
     
     
-    ani3 = matplotlib.animation.FuncAnimation(fig3,animate3,blit=False, frames=number_of_frames,repeat=False)
+    # ani3 = matplotlib.animation.FuncAnimation(fig3,animate3,blit=False, frames=number_of_frames,repeat=False)
     
-    plt.show()
+    # plt.show()
     
-    ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
+    # ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
     
 
 
@@ -262,39 +262,46 @@ if Total_Amount_Analysis == 'Y':
     for i in range(number_of_frames):
         time_p = time_point + '%02d'%(i)
         if path.exists(time_p + "_microenvironment0.mat"):
-            fine_data = sio.loadmat(time_p + "_microenvironment0.mat")['multiscale_microenvironment']
-            dx = fine_data[0,1]-fine_data[0,0]
-            micEnv_O2 =sum(fine_data[4,:])
+            fine_data = sio.loadmat(time_p + "_microenvironment0.mat")['multiscale_microenvironment']  
+            micEnv_O2 = sum(fine_data[4,:])
             micEnv_glu = sum(fine_data[5,:])
             micEnv_chem = sum(fine_data[6,:])
+
+            coarse_data = sio.loadmat(time_p + "_microenvironment1.mat")['multiscale_microenvironment']
+            coarse_oxy = round(sum(coarse_data[4,:]),2)
+            coarse_glu = sum(coarse_data[5,:])
+            coarse_chem = sum(coarse_data[6,:])
+            
             if i == 0:
                 initial_O2 = micEnv_O2
                 initial_glu = micEnv_glu
                 initial_chem = micEnv_chem
     
-            uptaken_O2 = o2_uptake_rate_per_cell*dx*dx*dx * number_of_cells * saving_times[i]
-            uptaken_glu = glu_uptake_rate_per_cell*dx*dx*dx * number_of_cells * saving_times[i]
     
-            total_O2.append(micEnv_O2)
-            total_glu.append(micEnv_glu)
+            total_O2.append(micEnv_O2*2880*512*2880 + coarse_oxy*2880*2880*4880)
+            total_glu.append(micEnv_glu*2880*512*2880 + coarse_glu*2880*2880*4880)
             total_chem.append(micEnv_chem)
     
             
+    total_O2_c = [x / (2880*2880*5392) for x in total_O2]
+    total_glu_c = [x / (2880*2880*5392) for x in total_glu]
+    
     
     plt.figure()
-    plt.plot(saving_times, total_O2)
+    plt.plot(saving_times[1:], total_O2_c[1:])
     plt.title('Oxygen')
     plt.xlabel('time(min)')
     plt.ylabel('Concentration(mM)')
     plt.figure()
-    plt.plot(saving_times, total_glu)
+    plt.plot(saving_times[1:], total_glu_c[1:])
     plt.title('Glucose')
     plt.xlabel('time(min)')
     plt.ylabel('Concentration(mM)')
-    plt.figure()
-    plt.plot(saving_times, total_chem)
-    plt.title('Chemokine')
-    plt.xlabel('time(min)')
-    plt.ylabel('Concentration(mM)')
+    
+    # plt.figure()
+    # plt.plot(saving_times, total_chem)
+    # plt.title('Chemokine')
+    # plt.xlabel('time(min)')
+    # plt.ylabel('Concentration(mM)')
     
     

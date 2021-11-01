@@ -41,8 +41,8 @@ os.chdir(out_path)
 time_point = "output000000"
 number_of_frames = len(saving_times)
 
-Temporospatial_Plotting = 'Y'
-Total_Amount_Analysis = 'N'
+Temporospatial_Plotting = 'n'
+Total_Amount_Analysis = 'Y'
 
 
 
@@ -238,8 +238,8 @@ if Total_Amount_Analysis == 'Y':
             uptaken_O2 = o2_uptake_rate_per_cell * number_of_cells * saving_times[i]
             uptaken_glu = glu_uptake_rate_per_cell * number_of_cells * saving_times[i]
     
-            total_O2.append(micEnv_O2+uptaken_O2)
-            total_glu.append(micEnv_glu+uptaken_glu)
+            total_O2.append(micEnv_O2)
+            total_glu.append(micEnv_glu)
             total_chem.append(micEnv_chem)
     
             

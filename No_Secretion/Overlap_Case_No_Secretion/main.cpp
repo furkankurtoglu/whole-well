@@ -121,8 +121,8 @@ int main( int argc, char* argv[] )
     coarse_well.mesh.units = "micron";
     coarse_well.time_units = "min";
     
-    coarse_well.set_density( 0 , "oxygen", "mM", 108000 , 0.00 );
-    coarse_well.add_density( "glucose", "mM", 30000 , 0.0 );
+    coarse_well.set_density( 0 , "oxygen", "mM", 0 , 0.00 ); //108000
+    coarse_well.add_density( "glucose", "mM", 0 , 0.0 ); //30000
     coarse_well.add_density( "chemokine", "mM", 100000 , 0.0);
     coarse_well.resize_space( 100, 1 , 1 );
     
@@ -145,6 +145,21 @@ int main( int argc, char* argv[] )
         coarse_well(m)[1]=16.897255; // glucose
         coarse_well(m)[2]=0; //chemokine
     }
+	
+	
+/* 	for ( int m = 0; m < coarse_well.mesh.voxels.size() ; m++)
+    {
+		double coarMic_y = coarse_well.mesh.voxels[m].center[0];
+		std::cout << coarMic_y << std::endl;
+		if (coarMic_y == 240)
+		{
+			std::cout << "changing voxels with y = 240" << std::endl;
+			coarse_well(m)[0]= 0 ; // oxygen
+			coarse_well(m)[1]= 0; // glucose
+			coarse_well(m)[2]= 0; //chemokine
+		}
+		
+	} */
     
     coarse_well.display_information( std::cout );
     coarse_well.write_to_matlab("output/output00000000_microenvironment1.mat");
@@ -241,7 +256,7 @@ int main( int argc, char* argv[] )
 	try 
 	{		
         
-		while( PhysiCell_globals.current_time < PhysiCell_settings.max_time + 0.1*diffusion_dt )
+		while( PhysiCell_globals.current_time < PhysiCell_settings.max_time + 0.1 * diffusion_dt )
 		{
             //std::cout << "NEXT TIME WILL BE SAVED AT : " << v[i] << std::endl;
 			// save data if it's time. 

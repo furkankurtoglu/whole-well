@@ -288,12 +288,12 @@ if Total_Amount_Analysis == 'Y':
     
     
     plt.figure()
-    plt.plot(saving_times[1:], total_O2_c[1:])
+    plt.plot(saving_times, total_O2_c)
     plt.title('Oxygen')
     plt.xlabel('time(min)')
     plt.ylabel('Concentration(mM)')
     plt.figure()
-    plt.plot(saving_times[1:], total_glu_c[1:])
+    plt.plot(saving_times, total_glu_c)
     plt.title('Glucose')
     plt.xlabel('time(min)')
     plt.ylabel('Concentration(mM)')

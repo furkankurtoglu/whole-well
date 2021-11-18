@@ -121,8 +121,8 @@ int main( int argc, char* argv[] )
     coarse_well.mesh.units = "micron";
     coarse_well.time_units = "min";
     
-    coarse_well.set_density( 0 , "oxygen", "mM", 0 , 0.00 ); //108000
-    coarse_well.add_density( "glucose", "mM", 0 , 0.0 ); //30000
+    coarse_well.set_density( 0 , "oxygen", "mM", 0.0 , 0.00 ); //108000
+    coarse_well.add_density( "glucose", "mM", 0.0 , 0.0 ); //30000
     coarse_well.add_density( "chemokine", "mM", 100000 , 0.0);
     coarse_well.resize_space( 100, 1 , 1 );
     
@@ -141,16 +141,16 @@ int main( int argc, char* argv[] )
     
     for ( int m = 0; m < coarse_well.mesh.voxels.size() ; m++)
     {
-        coarse_well(m)[0]= 0.285; // oxygen
-        coarse_well(m)[1]=16.897255; // glucose
-        coarse_well(m)[2]=0; //chemokine
+        coarse_well(m)[0]= 0.285; // oxygen  //0.285
+        coarse_well(m)[1]= 16.897255; // glucose //16.897255
+        coarse_well(m)[2]= 0; //chemokine
     }
 	
 	
-/* 	for ( int m = 0; m < coarse_well.mesh.voxels.size() ; m++)
+	for ( int m = 0; m < coarse_well.mesh.voxels.size() ; m++)
     {
 		double coarMic_y = coarse_well.mesh.voxels[m].center[0];
-		std::cout << coarMic_y << std::endl;
+		//std::cout << coarMic_y << std::endl;
 		if (coarMic_y == 240)
 		{
 			std::cout << "changing voxels with y = 240" << std::endl;
@@ -159,7 +159,7 @@ int main( int argc, char* argv[] )
 			coarse_well(m)[2]= 0; //chemokine
 		}
 		
-	} */
+	}
     
     coarse_well.display_information( std::cout );
     coarse_well.write_to_matlab("output/output00000000_microenvironment1.mat");

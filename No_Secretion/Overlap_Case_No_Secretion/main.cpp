@@ -121,8 +121,8 @@ int main( int argc, char* argv[] )
     coarse_well.mesh.units = "micron";
     coarse_well.time_units = "min";
     
-    coarse_well.set_density( 0 , "oxygen", "mM", 0.0 , 0.00 ); //108000
-    coarse_well.add_density( "glucose", "mM", 0.0 , 0.0 ); //30000
+    coarse_well.set_density( 0 , "oxygen", "mM", 108000.0 , 0.00 ); //108000
+    coarse_well.add_density( "glucose", "mM", 30000.0 , 0.0 ); //30000
     coarse_well.add_density( "chemokine", "mM", 100000 , 0.0);
     coarse_well.resize_space( 100, 1 , 1 );
     
@@ -359,28 +359,27 @@ int main( int argc, char* argv[] )
             double glu_diff = coarse_overlap_after_diffusion[1] - coarse_overlap_before_diffusion[1];
             double chem_diff = coarse_overlap_after_diffusion[2] - coarse_overlap_before_diffusion[2];
 			
+            sprintf( filename , "%s/output%08u_microenvironment0_before_projection.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
+			microenvironment.write_to_matlab(filename);
+            
             for ( int m = 0; m < microenvironment.mesh.voxels.size() ; m++)
             {
                 double mic_cen_y = microenvironment.mesh.voxels[m].center[1];
                 if (mic_cen_y == 240)
                 { 
-					y_240 += 1;
-                    //std::cout << "Glucose difference per voxel  : "  <<glu_diff/y_240 << std::endl; 
-                    microenvironment(m)[0] += oxy_diff/y_240; //oxygen
-                    microenvironment(m)[1] += glu_diff/y_240; //glucose
-                    microenvironment(m)[2] += chem_diff/y_240; //chemokine
+                    //std::cout << "Glucose difference per voxel  : "  <<glu_diff << std::endl; 
+                    microenvironment(m)[0] += oxy_diff/8100; //oxygen
+                    microenvironment(m)[1] += glu_diff/8100; //glucose
+                    microenvironment(m)[2] += chem_diff/8100; //chemokine
                 }
+
             }
-			
+            
 			
 			sprintf( filename , "%s/output%08u_microenvironment0_after_projection.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
 			microenvironment.write_to_matlab(filename);
 			// run PhysiCell 
 			((Cell_Container *)microenvironment.agent_container)->update_all_cells( PhysiCell_globals.current_time );
-			
-			/*
-			  Custom add-ons could potentially go here. 
-			*/
 			
 			PhysiCell_globals.current_time += diffusion_dt;
             

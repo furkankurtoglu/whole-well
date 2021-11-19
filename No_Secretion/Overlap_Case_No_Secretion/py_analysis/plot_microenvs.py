@@ -283,8 +283,8 @@ if Total_Amount_Analysis == 'Y':
             total_chem.append(micEnv_chem)
     
             
-    total_O2_c = [x / (2880*2880*5392) for x in total_O2]
-    total_glu_c = [x / (2880*2880*5392) for x in total_glu]
+    total_O2_c = [x / (2880*2880*5360) for x in total_O2]
+    total_glu_c = [x / (2880*2880*5360) for x in total_glu]
     
     
     plt.figure()

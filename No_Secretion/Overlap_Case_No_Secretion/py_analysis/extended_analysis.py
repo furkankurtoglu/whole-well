@@ -37,43 +37,40 @@ out_path = os.path.join(main_path, "output")
 
 os.chdir(out_path)
 
-time_point = "output00000011"
+time_point = "output00000016"
 number_of_frames = len(saving_times)
 
-
+#%% Fine Microenvironment Diffusion
 fine_data_before_diffusion = sio.loadmat(time_point + "_microenvironment0_before_diffusion.mat")['multiscale_microenvironment']
-fine_data_before_diffusion_oxy = fine_data_before_diffusion[4,np.where(fine_data_before_diffusion[2,:] == 16)] * (2880*2880*512)
+aa_fine_data_before_diffusion_glu = np.sum(fine_data_before_diffusion[5,:])
 
-
-coarse_before_coarsening = sio.loadmat(time_point + "_microenvironment1_before_coarsening.mat")['multiscale_microenvironment']
-coarse_before_coarsening_oxy = coarse_before_coarsening[4,:] * (2880*2880*512)
-
-
-coarse_after_coarsening = sio.loadmat(time_point + "_microenvironment1_after_coarsening.mat")['multiscale_microenvironment']
-coarse_after_coarsening_oxy = coarse_after_coarsening[4,:] * (2880*2880*512)
-
-coarse_after_diffusion = sio.loadmat(time_point + "_microenvironment1_after_diffusion.mat")['multiscale_microenvironment']
-coarse_after_diffusion_oxy = coarse_after_diffusion[4,:] * (2880*2880*512)
-
-coarse_after_diffusion_with_DC = sio.loadmat(time_point + "_microenvironment1_after_diffusion_with_DC.mat")['multiscale_microenvironment']
-coarse_after_diffusion_with_DC_oxy = coarse_after_diffusion_with_DC[4,:] * (2880*2880*512)
-
-
-fine_after_projection = sio.loadmat(time_point + "_microenvironment1_after_coarsening.mat")['multiscale_microenvironment']
-fine_after_projection_oxy = fine_after_projection[4,:] * (2880*2880*512)
-
-
-#%%
-# Coarse Diffusion Total
-tot_coarse_bef_diffus = np.sum(coarse_after_coarsening_oxy)
-tot_coarse_aft_diffus = np.sum(coarse_after_diffusion_oxy)
+fine_data_after_diffusion = sio.loadmat(time_point + "_microenvironment0_after_diffusion.mat")['multiscale_microenvironment']
+ab_fine_data_after_diffusion_glu = np.sum(fine_data_before_diffusion[5,:])
 
 
 #%% 
-# Dirichlet BC update
-tot_coarse_aft_dif_DC = np.sum(coarse_after_diffusion_with_DC_oxy)
+coarse_before_coarsening = sio.loadmat(time_point + "_microenvironment1_before_coarsening.mat")['multiscale_microenvironment']
+ba_coarse_before_coarsening_glu = np.sum(coarse_before_coarsening[5,:])
 
+
+coarse_after_coarsening = sio.loadmat(time_point + "_microenvironment1_after_coarsening.mat")['multiscale_microenvironment']
+bb_coarse_after_coarsening_glu = np.sum(coarse_after_coarsening[5,:])
+
+coarse_after_diffusion = sio.loadmat(time_point + "_microenvironment1_after_diffusion.mat")['multiscale_microenvironment']
+bc_coarse_after_diffusion_glu = np.sum(coarse_after_diffusion[5,:])
+
+coarse_after_diffusion_with_DC = sio.loadmat(time_point + "_microenvironment1_after_diffusion_with_DC.mat")['multiscale_microenvironment']
+bd_coarse_after_diffusion_with_DC_glu = np.sum(coarse_after_diffusion_with_DC[5,:])
+
+
+fine_before_projection = sio.loadmat(time_point + "_microenvironment0_before_projection.mat")['multiscale_microenvironment']
+ac_fine_before_projection_glu = np.sum(fine_before_projection[5,:])
+
+fine_after_projection = sio.loadmat(time_point + "_microenvironment0_after_projection.mat")['multiscale_microenvironment']
+ad_fine_after_projection_glu = np.sum(fine_after_projection[5,:])
 
 
 #%%
-# 
+fine_gain = ad_fine_after_projection_glu - ac_fine_before_projection_glu
+coarse_lost = ba_coarse_before_coarsening_glu - bb_coarse_after_coarsening_glu
+Net_Difference = (fine_gain - coarse_lost) * 2880 *2880 * 512

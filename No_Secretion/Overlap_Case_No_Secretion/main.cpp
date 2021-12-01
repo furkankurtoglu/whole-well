@@ -130,7 +130,7 @@ int main( int argc, char* argv[] )
     double dy = 2880;
     double dz = 2880;
     
-    coarse_well.resize_space( 224.0, 5104.0 , -dy/2.0+16 , dy/2.0+16 , -dz/2.0+16 , dz/2.0+16 , dx, dy, dz );
+    coarse_well.resize_space( 224.0, 5120.0 , -dy/2.0+16 , dy/2.0+16 , -dz/2.0+16 , dz/2.0+16 , dx, dy, dz );
     std::vector<double> dirichlet_condition = { 0 , 0, 0, 0 };
 
     coarse_well.set_substrate_dirichlet_activation(0,false);
@@ -355,9 +355,9 @@ int main( int argc, char* argv[] )
 
             // right side overwrite
             //std::cout << y_240 << std::endl;
-            double oxy_diff = coarse_overlap_after_diffusion[0] - coarse_overlap_before_diffusion[0];
-            double glu_diff = coarse_overlap_after_diffusion[1] - coarse_overlap_before_diffusion[1];
-            double chem_diff = coarse_overlap_after_diffusion[2] - coarse_overlap_before_diffusion[2];
+            double oxy_diff = coarse_overlap_after_diffusion[0];// - coarse_overlap_before_diffusion[0];
+            double glu_diff = coarse_overlap_after_diffusion[1];// - coarse_overlap_before_diffusion[1];
+            double chem_diff = coarse_overlap_after_diffusion[2];// - coarse_overlap_before_diffusion[2];
 			
             sprintf( filename , "%s/output%08u_microenvironment0_before_projection.mat" , PhysiCell_settings.folder.c_str(),  PhysiCell_globals.full_output_index );      
 			microenvironment.write_to_matlab(filename);
@@ -368,9 +368,9 @@ int main( int argc, char* argv[] )
                 if (mic_cen_y == 240)
                 { 
                     //std::cout << "Glucose difference per voxel  : "  <<glu_diff << std::endl; 
-                    microenvironment(m)[0] += oxy_diff/8100; //oxygen
-                    microenvironment(m)[1] += glu_diff/8100; //glucose
-                    microenvironment(m)[2] += chem_diff/8100; //chemokine
+                    microenvironment(m)[0] = oxy_diff/8100; //oxygen
+                    microenvironment(m)[1] = glu_diff/8100; //glucose
+                    microenvironment(m)[2] = chem_diff/8100; //chemokine
                 }
 
             }

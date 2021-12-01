@@ -278,8 +278,8 @@ if Total_Amount_Analysis == 'Y':
                 initial_chem = micEnv_chem
     
     
-            total_O2.append(micEnv_O2*2880*512*2880 + coarse_oxy*2880*2880*4880)
-            total_glu.append(micEnv_glu*2880*512*2880 + coarse_glu*2880*2880*4880)
+            total_O2.append(micEnv_O2*2880*512*2880 + coarse_oxy*2880*2880*4912)
+            total_glu.append(micEnv_glu*2880*512*2880 + coarse_glu*2880*2880*4912)
             total_chem.append(micEnv_chem)
     
             

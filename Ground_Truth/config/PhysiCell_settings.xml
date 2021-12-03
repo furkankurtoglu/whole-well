@@ -292,14 +292,14 @@
 	</initial_conditions>	
 	
 	<user_parameters>
-		<random_seed type="int" units="dimensionless">0</random_seed> 
+		<!-- <random_seed type="int" units="dimensionless">0</random_seed> -->
 		<!-- example parameters from the template --> 
 		
 		<div_initialization type="divider" description="---Initialization settings---"/>
 		<test_cell_seeding type="bool" units = "none">true</test_cell_seeding>
 		<fibroblast_seeding type="bool" units="none">false</fibroblast_seeding>
 		<organoid_cell_seeding type="bool" units="none">false</organoid_cell_seeding>
-		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">170278</number_of_cells>
+		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">1</number_of_cells>
 	</user_parameters>
 	
 </PhysiCell_settings>

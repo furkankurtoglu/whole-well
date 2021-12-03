@@ -70,7 +70,8 @@
 void create_cell_types( void )
 {
 	// set the random seed 
-	SeedRandom( parameters.ints("random_seed") );  
+	float random_seed = UniformRandom()*float(10000);
+	SeedRandom( int(random_seed) );  
 	
 	/* 
 	   Put any modifications to default cell definition here if you 
@@ -178,7 +179,6 @@ void setup_tissue( void )
 			position[0] = Xmin + UniformRandom()*Xrange; 
 			position[1] = Ymin + UniformRandom()*Yrange; 
 			position[2] = Zmin + UniformRandom()*Zrange; 
-			
 			pC = create_cell( *pCD ); 
 			pC->assign_position( position );
 		}

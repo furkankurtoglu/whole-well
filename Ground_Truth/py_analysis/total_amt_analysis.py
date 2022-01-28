@@ -61,7 +61,7 @@ prev_chem = init_total_chem
 o2_uptake_rate_per_cell = 0.005
 glu_uptake_rate_per_cell = 0.010
 chem_secretion_rate_per_cell_per_min = 0.01
-number_of_cells = 170278
+number_of_cells = 1
 
 uptaken_o2_arr = []
 uptaken_glu_arr = []
@@ -102,7 +102,8 @@ print("_______________")
 print(uptaken_o2_arr)
 print("_______________")
 print(uptaken_o2_arr/total_oxy_diff)
-
+print("_______________")
+print(total_chem)
 #uptaken_o2_arr = np.asarray(uptaken_o2_arr)
 #plt.plot(saving_times, uptaken_o2_arr, c = "blue")
 #plt.plot(saving_times, total_oxy_diff, c = "red")

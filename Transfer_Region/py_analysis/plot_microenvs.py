@@ -19,10 +19,10 @@ import matplotlib.animation
 
 import numpy as np
 import pandas as pd
-from fury import window, actor, utils, primitive, io, ui
-from fury.data import read_viz_textures, fetch_viz_textures
+#from fury import window, actor, utils, primitive, io, ui
+#from fury.data import read_viz_textures, fetch_viz_textures
 import itertools
-import vtk
+#import vtk
 import glob
 import time
 import random

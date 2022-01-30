@@ -75,7 +75,7 @@ if Temporospatial_Plotting == 'Y':
         # Coarse MicroEnv Data Parsing
         if path.exists(time_point + "_microenvironment1.mat"):
             coarse_data = sio.loadmat(time_point + "_microenvironment1.mat")['multiscale_microenvironment']
-            coarse_y = coarse_data[0,:]
+            coarse_y = coarse_data[1,:]
             coarse_x = np.unique(fine_data[0,:])
             coarse_X, coarse_Y = np.meshgrid(coarse_x, coarse_y)
             coarse_oxy = coarse_data[4,:]

@@ -389,7 +389,9 @@ int main( int argc, char* argv[] )
 			v3[1] /= coarse_well.mesh.voxels[0].volume;
 			v3[2] /= coarse_well.mesh.voxels[0].volume;
 
-			coarse_well(0)[0] = v3[0];
+
+            //std::cout << "Oxygen value = " << v3[0] << std::endl;
+			coarse_well(0)[0] = 0.0;
 			coarse_well(0)[1] = v3[1];
 			coarse_well(0)[2] = v3[2];
 			

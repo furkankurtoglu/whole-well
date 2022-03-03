@@ -59,13 +59,13 @@ if Temporospatial_Plotting == 'Y':
             fine_data = sio.loadmat(time_point + "_microenvironment0.mat")['multiscale_microenvironment']
             fine_x = np.unique(fine_data[0,:])
             fine_y = np.unique(fine_data[1,:])
-            fine_X, fine_Y = np.meshgrid(fine_x, fine_y)
+            fine_X, fine_Y = np.meshgrid(fine_y, fine_x)
             fine_oxy = fine_data[4,np.where(fine_data[2,:] == 16)]
-            fine_oxy = fine_oxy.reshape((len(fine_y),len(fine_x)))
+            fine_oxy = fine_oxy.reshape((len(fine_x),len(fine_y)))
             fine_glu = fine_data[5,np.where(fine_data[2,:] == 16)]
-            fine_glu = fine_glu.reshape((len(fine_y),len(fine_x)))
+            fine_glu = fine_glu.reshape((len(fine_x),len(fine_y)))
             fine_chem = fine_data[6,np.where(fine_data[2,:] == 16)]
-            fine_chem = fine_chem.reshape((len(fine_y),len(fine_x)))
+            fine_chem = fine_chem.reshape((len(fine_x),len(fine_y)))
             fine_oxy_tuple = (fine_X, fine_Y, fine_oxy)
             fine_glu_tuple = (fine_X, fine_Y, fine_glu)
             fine_chem_tuple = (fine_X, fine_Y, fine_chem)
@@ -75,15 +75,28 @@ if Temporospatial_Plotting == 'Y':
         # Coarse MicroEnv Data Parsing
         if path.exists(time_point + "_microenvironment1.mat"):
             coarse_data = sio.loadmat(time_point + "_microenvironment1.mat")['multiscale_microenvironment']
-            coarse_y = coarse_data[0,:]
-            coarse_x = np.unique(fine_data[0,:])
-            coarse_X, coarse_Y = np.meshgrid(coarse_x, coarse_y)
+            #coarse_y = coarse_data[1,:]
+            #coarse_x = np.unique(fine_data[1,:])
+            coarse_x = coarse_data[0,:]
+            coarse_y = np.unique(fine_data[1,:])
+            #print(coarse_x.shape)
+            coarse_X, coarse_Y = np.meshgrid(coarse_y, coarse_x)
             coarse_oxy = coarse_data[4,:]
-            coarse_oxy = np.transpose(np.tile(coarse_oxy,(90,1)))
+            #print(coarse_oxy.shape)
+            #print(coarse_X.shape)
+            #print(coarse_Y.shape)
+            #coarse_oxy = np.transpose(np.tile(coarse_oxy,(90,1)))
+            #coarse_oxy = np.transpose(np.tile(coarse_oxy,(16,1)))
+            coarse_oxy = np.tile(coarse_oxy,(90,1))
+            #print(coarse_oxy.shape)
             coarse_glu = coarse_data[5,:]
-            coarse_glu = np.transpose(np.tile(coarse_glu,(90,1)))
+            #coarse_glu = np.transpose(np.tile(coarse_glu,(90,1)))
+            #coarse_glu = np.transpose(np.tile(coarse_glu,(16,1)))
+            coarse_glu = np.tile(coarse_glu,(90,1))
             coarse_chem = coarse_data[6,:]
-            coarse_chem = np.transpose(np.tile(coarse_chem,(90,1)))
+            #coarse_chem = np.transpose(np.tile(coarse_chem,(90,1)))
+            #coarse_chem = np.transpose(np.tile(coarse_chem,(16,1)))
+            coarse_chem = np.tile(coarse_chem,(90,1))
             coarse_tuple = (coarse_X, coarse_Y, coarse_oxy, coarse_glu, coarse_chem)
             
             
@@ -109,12 +122,14 @@ if Temporospatial_Plotting == 'Y':
     # color bar
     tp = "output00000020"
     ft, ct, tt = data_parser(tp)
-    print(ft)
     fine_X, fine_Y, fine_oxy = ft[0]
     cX, cY, cOxy, cGlu, cChem = ct
     w_X = np.concatenate((fine_X,cX),axis=0)
     w_Y = np.concatenate((fine_Y,cY),axis=0)
-    w_O = np.concatenate((fine_oxy,cOxy),axis=0)
+    fine_oxy = np.transpose(fine_oxy)
+    #print(cOxy.shape)
+    w_O = np.concatenate((fine_oxy,cOxy),axis=1)
+    w_O = np.transpose(w_O)
     zmin = min([min(zl) for zl in w_O])
     zmax = max([max(zl) for zl in w_O])
     levels = np.linspace(zmin, 0.28500001,41)
@@ -122,7 +137,8 @@ if Temporospatial_Plotting == 'Y':
     cp = axs.contourf(w_Y,w_X,w_O, **kw)
     cbar = plt.colorbar(cp,format='%0.4f')
     axs.clear()
-    
+    #plt.figure()
+    #plt.show()
     
     
     def animate(i):
@@ -132,9 +148,12 @@ if Temporospatial_Plotting == 'Y':
         cX, cY, cOxy, cGlu, cChem = ct
         w_X = np.concatenate((fine_X,cX),axis=0)
         w_Y = np.concatenate((fine_Y,cY),axis=0)
-        w_O = np.concatenate((fine_oxy,cOxy),axis=0)
+        fine_oxy = np.transpose(fine_oxy)
+        #print(cOxy.shape)
+        w_O = np.concatenate((fine_oxy,cOxy),axis=1)
+        w_O = np.transpose(w_O)
         axs.clear()
-        axs.contourf(w_Y,w_X,w_O, **kw)
+        axs.contourf(w_X,w_Y,w_O, **kw)
         axs.set_title('Oxygen, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
         axs.invert_xaxis()
         axs.axis('scaled')
@@ -150,7 +169,7 @@ if Temporospatial_Plotting == 'Y':
     
     ani.save('./oxygen.gif', writer='imagemagick', fps=4)
     
-    
+    '''
     
     fig2, ax = plt.subplots()
     
@@ -239,7 +258,7 @@ if Temporospatial_Plotting == 'Y':
     
 
 
-
+'''
 #%%
 
 
@@ -297,5 +316,6 @@ if Total_Amount_Analysis == 'Y':
     plt.title('Chemokine')
     plt.xlabel('time(min)')
     plt.ylabel('Concentration(mM)')
+    
     
     

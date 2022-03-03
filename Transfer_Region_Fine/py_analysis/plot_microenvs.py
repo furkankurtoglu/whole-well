@@ -124,6 +124,8 @@ if Temporospatial_Plotting == 'Y':
     ft, ct, tt = data_parser(tp)
     fine_X, fine_Y, fine_oxy = ft[0]
     cX, cY, cOxy, cGlu, cChem = ct
+    print(fine_X.shape)
+    print(cX.shape)
     w_X = np.concatenate((fine_X,cX),axis=0)
     w_Y = np.concatenate((fine_Y,cY),axis=0)
     fine_oxy = np.transpose(fine_oxy)

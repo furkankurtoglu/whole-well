@@ -42,13 +42,15 @@ time_point = "output000000"
 number_of_frames = len(saving_times)
 
 Temporospatial_Plotting = 'Y'
-Total_Amount_Analysis = 'N'
+Total_Amount_Analysis = 'Y'
 
 
 
 
 
 if Temporospatial_Plotting == 'Y':
+    oxy_glu_analysis = 'Y'
+    chem_analysis = 'Y'
     def data_parser (time_point):
         # Fine MicroEnv Data Parsing
         fine_tuple = []
@@ -107,135 +109,142 @@ if Temporospatial_Plotting == 'Y':
             
     subs_list = get_subs_name()
     
-    fig, axs = plt.subplots()
-    
-    # color bar
-    tp = "output00000020"
-    ft, ct, tt = data_parser(tp)
-    fine_X, fine_Y, fine_oxy = ft[0]
-    cX, cY, cOxy, cGlu, cChem = ct
-    w_X = np.concatenate((fine_X,cX),axis=0)
-    w_Y = np.concatenate((fine_Y,cY),axis=0)
-    w_O = np.concatenate((fine_oxy,cOxy),axis=0)
-    zmin = min([min(zl) for zl in w_O])
-    zmax = max([max(zl) for zl in w_O])
-    levels = np.linspace(zmin, 0.28500001,41)
-    kw = dict(levels=levels, vmin=zmin, vmax=0.28500001, origin='lower')
-    cp = axs.contourf(w_Y,w_X,w_O, **kw)
-    cbar = plt.colorbar(cp,format='%0.4f')
-    axs.clear()
-    
-    
-    def animate(i):
-        time_p= time_point + '%02d'%(i)
-        ft, ct, tt = data_parser(time_p)
+    if oxy_glu_analysis == 'Y':
+        fig, axs = plt.subplots()
+        
+        # color bar
+        tp = "output00000020"
+        ft, ct, tt = data_parser(tp)
         fine_X, fine_Y, fine_oxy = ft[0]
         cX, cY, cOxy, cGlu, cChem = ct
         w_X = np.concatenate((fine_X,cX),axis=0)
         w_Y = np.concatenate((fine_Y,cY),axis=0)
         w_O = np.concatenate((fine_oxy,cOxy),axis=0)
+        zmin = min([min(zl) for zl in w_O])
+        zmax = max([max(zl) for zl in w_O])
+        #levels = np.linspace(zmin, 0.28500001,41)
+        #kw = dict(levels=levels, vmin=zmin, vmax=0.28500001, origin='lower')
+        levels = np.linspace(0, 0.28500001,41)
+        kw = dict(levels=levels, vmin=0, vmax=0.28500001, origin='lower')
+        cp = axs.contourf(w_Y,w_X,w_O, **kw)
+        cbar = plt.colorbar(cp,format='%0.4f')
         axs.clear()
-        axs.contourf(w_X,w_Y,w_O, **kw)
-        axs.set_title('Oxygen, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
-        axs.invert_xaxis()
-        axs.axis('scaled')
         
         
+        def animate(i):
+            time_p= time_point + '%02d'%(i)
+            ft, ct, tt = data_parser(time_p)
+            fine_X, fine_Y, fine_oxy = ft[0]
+            cX, cY, cOxy, cGlu, cChem = ct
+            w_X = np.concatenate((fine_X,cX),axis=0)
+            w_Y = np.concatenate((fine_Y,cY),axis=0)
+            w_O = np.concatenate((fine_oxy,cOxy),axis=0)
+            axs.clear()
+            axs.contourf(w_X,w_Y,w_O, **kw)
+            axs.set_title('Oxygen, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+            axs.invert_xaxis()
+            axs.axis('scaled')
+            
+            
+            
+            
+        number_of_frames = len(saving_times)
         
+        ani = matplotlib.animation.FuncAnimation(fig,animate,blit=False, frames=number_of_frames,repeat=False)
         
-    number_of_frames = len(saving_times)
-    
-    ani = matplotlib.animation.FuncAnimation(fig,animate,blit=False, frames=number_of_frames,repeat=False)
-    
-    plt.show()
-    
-    ani.save('./oxygen.gif', writer='imagemagick', fps=4)
+        plt.show()
+        
+        ani.save('./oxygen.gif', writer='imagemagick', fps=4)
     
     
-    fig2, ax = plt.subplots()
-    
-    # color bar
-    tp = "output00000020"
-    ft, ct, tt = data_parser(tp)
-    fine_X, fine_Y, fine_glu = ft[1]
-    cX, cY, cOxy, cGlu, cChem = ct
-    w_X = np.concatenate((fine_X,cX),axis=0)
-    w_Y = np.concatenate((fine_Y,cY),axis=0)
-    w_G = np.concatenate((fine_glu,cGlu),axis=0)
-    zmin2 = min([min(zl) for zl in w_G])
-    zmax2 = max([max(zl) for zl in w_G])
-    levels2 = np.linspace(zmin2, 16.897255)
-    kw2 = dict(levels=levels2, vmin=zmin2, vmax=16.897255, origin='lower')
-    cp2 = ax.contourf(w_X,w_Y,w_G, **kw2)
-    cbar2 = plt.colorbar(cp2,format='%0.2f')
-    ax.clear()
-    
-    def animate2(i):
-        time_p= time_point + '%02d'%(i)
-        ft, ct, tt = data_parser(time_p)
+        fig2, ax = plt.subplots()
+        
+        # color bar
+        tp = "output00000020"
+        ft, ct, tt = data_parser(tp)
         fine_X, fine_Y, fine_glu = ft[1]
         cX, cY, cOxy, cGlu, cChem = ct
         w_X = np.concatenate((fine_X,cX),axis=0)
         w_Y = np.concatenate((fine_Y,cY),axis=0)
         w_G = np.concatenate((fine_glu,cGlu),axis=0)
+        zmin2 = min([min(zl) for zl in w_G])
+        zmax2 = max([max(zl) for zl in w_G])
+        #levels2 = np.linspace(zmin2, zmax2)
+        #kw2 = dict(levels=levels2, vmin=zmin2, vmax=zmax2, origin='lower')
+        levels2 = np.linspace(0, 16.897255)
+        kw2 = dict(levels=levels2, vmin=0, vmax=16.897255, origin='lower')
+        cp2 = ax.contourf(w_X,w_Y,w_G, **kw2)
+        cbar2 = plt.colorbar(cp2,format='%0.2f')
         ax.clear()
-        ax.contourf(w_X,w_Y,w_G, **kw2)
-        ax.set_title('Glucose, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
-        ax.invert_xaxis()
-        ax.axis('scaled')
         
+        def animate2(i):
+            time_p= time_point + '%02d'%(i)
+            ft, ct, tt = data_parser(time_p)
+            fine_X, fine_Y, fine_glu = ft[1]
+            cX, cY, cOxy, cGlu, cChem = ct
+            w_X = np.concatenate((fine_X,cX),axis=0)
+            w_Y = np.concatenate((fine_Y,cY),axis=0)
+            w_G = np.concatenate((fine_glu,cGlu),axis=0)
+            ax.clear()
+            ax.contourf(w_X,w_Y,w_G, **kw2)
+            ax.set_title('Glucose, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+            ax.invert_xaxis()
+            ax.axis('scaled')
+            
+        
+        
+        ani2 = matplotlib.animation.FuncAnimation(fig2,animate2,blit=False, frames=number_of_frames,repeat=False)
+        
+        plt.show()
+        
+        ani2.save('./glucose.gif', writer='imagemagick', fps=4)
     
     
-    ani2 = matplotlib.animation.FuncAnimation(fig2,animate2,blit=False, frames=number_of_frames,repeat=False)
-    
-    plt.show()
-    
-    ani2.save('./glucose.gif', writer='imagemagick', fps=4)
     
     
     
-    
-    
-    
-    fig3, ax3 = plt.subplots()
-    
-    # color bar
-    tp = "output00000020"
-    ft, ct, tt = data_parser(tp)
-    fine_X, fine_Y, fine_chem = ft[2]
-    cX, cY, cOxy, cGlu, cChem = ct
-    w_X = np.concatenate((fine_X,cX),axis=0)
-    w_Y = np.concatenate((fine_Y,cY),axis=0)
-    w_C = np.concatenate((fine_chem,cChem),axis=0)
-    zmin3 = min([min(zl) for zl in w_C])
-    zmax3 = max([max(zl) for zl in w_C])
-    levels3 = np.linspace(0, zmax3)
-    kw3 = dict(levels=levels3, vmin=0, vmax=zmax3, origin='lower')
-    cp3 = ax3.contourf(w_X,w_Y,w_C, **kw3)
-    cbar3 = plt.colorbar(cp3,format='%0.5f')
-    ax3.clear()
-    
-    def animate3(i):
-        time_p= time_point + '%02d'%(i)
-        ft, ct, tt = data_parser(time_p)
+    if chem_analysis == 'Y':
+        fig3, ax3 = plt.subplots()
+        
+        # color bar
+        tp = "output00000020"
+        ft, ct, tt = data_parser(tp)
         fine_X, fine_Y, fine_chem = ft[2]
         cX, cY, cOxy, cGlu, cChem = ct
         w_X = np.concatenate((fine_X,cX),axis=0)
         w_Y = np.concatenate((fine_Y,cY),axis=0)
         w_C = np.concatenate((fine_chem,cChem),axis=0)
+        zmin3 = min([min(zl) for zl in w_C])
+        zmax3 = max([max(zl) for zl in w_C])
+        #levels3 = np.linspace(0, zmax3)
+        #kw3 = dict(levels=levels3, vmin=zmin3, vmax=zmax3, origin='lower')
+        levels3 = np.linspace(0, 16.0)
+        kw3 = dict(levels=levels3, vmin=0, vmax=16, origin='lower')
+        cp3 = ax3.contourf(w_X,w_Y,w_C, **kw3)
+        cbar3 = plt.colorbar(cp3,format='%0.5f')
         ax3.clear()
-        ax3.contourf(w_X,w_Y,w_C, **kw3)
-        ax3.set_title('Chemokine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
-        ax3.invert_xaxis()
-        ax3.axis('scaled')
         
-    
-    
-    ani3 = matplotlib.animation.FuncAnimation(fig3,animate3,blit=False, frames=number_of_frames,repeat=False)
-    
-    plt.show()
-    
-    ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
+        def animate3(i):
+            time_p= time_point + '%02d'%(i)
+            ft, ct, tt = data_parser(time_p)
+            fine_X, fine_Y, fine_chem = ft[2]
+            cX, cY, cOxy, cGlu, cChem = ct
+            w_X = np.concatenate((fine_X,cX),axis=0)
+            w_Y = np.concatenate((fine_Y,cY),axis=0)
+            w_C = np.concatenate((fine_chem,cChem),axis=0)
+            ax3.clear()
+            ax3.contourf(w_X,w_Y,w_C, **kw3)
+            ax3.set_title('Chemokine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+            ax3.invert_xaxis()
+            ax3.axis('scaled')
+            
+        
+        
+        ani3 = matplotlib.animation.FuncAnimation(fig3,animate3,blit=False, frames=number_of_frames,repeat=False)
+        
+        plt.show()
+        
+        ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
     
 
 
@@ -264,39 +273,68 @@ if Total_Amount_Analysis == 'Y':
         time_p = time_point + '%02d'%(i)
         if path.exists(time_p + "_microenvironment0.mat"):
             fine_data = sio.loadmat(time_p + "_microenvironment0.mat")['multiscale_microenvironment']
-            dx = fine_data[0,1]-fine_data[0,0]
-            micEnv_O2 =sum(fine_data[4,:])
-            micEnv_glu = sum(fine_data[5,:])
-            micEnv_chem = sum(fine_data[6,:])
+            voxel_volume = 32768/(10**15) # liters
+            cell_volume = 2494/(10**15) # liters
+            fine_volume = voxel_volume * len(fine_data[0])
+            coarse_data = sio.loadmat(time_p + "_microenvironment1.mat")['multiscale_microenvironment']
+            c_voxel_volume = voxel_volume*8100
+            coarse_volume = c_voxel_volume*len(coarse_data[0])
+            micEnv_O2 =sum(np.multiply(np.asarray(fine_data[4,:]), voxel_volume)) # mmol
+            micEnv_glu = sum(np.multiply(np.asarray(fine_data[5,:]), voxel_volume)) # mmol
+            micEnv_chem = sum(np.multiply(np.asarray(fine_data[6,:]), voxel_volume)) # mmol
+            cEnv_O2 =sum(np.multiply(np.asarray(coarse_data[4,:]), c_voxel_volume)) # mmol
+            cEnv_glu = sum(np.multiply(np.asarray(coarse_data[5,:]), c_voxel_volume)) # mmol
+            cEnv_chem = sum(np.multiply(np.asarray(coarse_data[6,:]), c_voxel_volume)) # mmol
+            '''
             if i == 0:
+                prev_oxy = micEnv_O2
                 initial_O2 = micEnv_O2
                 initial_glu = micEnv_glu
                 initial_chem = micEnv_chem
+                prev_oxy_density = (micEnv_O2.copy())/fine_volume # mmol/L ; mM
+                O2_diff.append(micEnv_O2)
+            if i > 0:
+                #uptaken_glu = glu_uptake_rate_per_cell*dx*dx*dx * number_of_cells * saving_times[i]
+                uptaken_O2 = cell_volume * number_of_cells * o2_uptake_rate_per_cell * prev_oxy_density * time_diff[i-1] # mmol
+                #uptaken_O2 = o2_uptake_rate_per_cell* prev_oxy * number_of_cells * saving_times[i]
+                #uptaken_O2 = o2_uptake_rate_per_cell * number_of_cells * saving_times[i]
+                #uptaken_O2 = o2_uptake_rate_per_cell* prev_oxy * saving_times[i]
+                O2_diff.append(prev_oxy_density*fine_volume - uptaken_O2)
+                prev_oxy_density = (micEnv_O2.copy())/fine_volume
+                
+            '''    
     
-            uptaken_O2 = o2_uptake_rate_per_cell*dx*dx*dx * number_of_cells * saving_times[i]
-            uptaken_glu = glu_uptake_rate_per_cell*dx*dx*dx * number_of_cells * saving_times[i]
-    
-            total_O2.append(micEnv_O2)
-            total_glu.append(micEnv_glu)
-            total_chem.append(micEnv_chem)
-    
+            total_O2.append(micEnv_O2 + cEnv_O2)
+            total_glu.append(micEnv_glu + cEnv_glu)
+            total_chem.append(micEnv_chem + cEnv_chem)
+
             
-    
+    print("Total Oxygen Amount (mmol)")
+    print(total_O2)        
+    print("------------------")
+    print("Total Glucose Amount (mmol)")
+    print(total_glu)
+    print("------------------")
+    print("Total Chemokine Amount (mmol)")
+    print(total_chem)
     plt.figure()
     plt.plot(saving_times, total_O2)
     plt.title('Oxygen')
     plt.xlabel('time(min)')
-    plt.ylabel('Concentration(mM)')
+    plt.ylabel('Amount (mmol)')
+    plt.show()
     plt.figure()
     plt.plot(saving_times, total_glu)
     plt.title('Glucose')
     plt.xlabel('time(min)')
-    plt.ylabel('Concentration(mM)')
+    plt.ylabel('Amount (mmol)')
+    plt.show()
     plt.figure()
     plt.plot(saving_times, total_chem)
     plt.title('Chemokine')
     plt.xlabel('time(min)')
-    plt.ylabel('Concentration(mM)')
+    plt.ylabel('Amount (mmol)')
+    plt.show() 
     
     
     

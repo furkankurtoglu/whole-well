@@ -97,7 +97,7 @@
 	</overall>
 	
 	<parallel>
-		<omp_num_threads>10</omp_num_threads>
+		<omp_num_threads>1</omp_num_threads>
 	</parallel> 
 	
 	<save>
@@ -299,7 +299,7 @@
 		<test_cell_seeding type="bool" units = "none">true</test_cell_seeding>
 		<fibroblast_seeding type="bool" units="none">false</fibroblast_seeding>
 		<organoid_cell_seeding type="bool" units="none">false</organoid_cell_seeding>
-		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">170278</number_of_cells>
+		<number_of_cells type="int" units="none" description="initial number of cells (for each cell type)">1</number_of_cells> <!-- 170278 -->
 	</user_parameters>
 	
 </PhysiCell_settings>

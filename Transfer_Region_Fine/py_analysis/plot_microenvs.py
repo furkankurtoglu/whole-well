@@ -41,7 +41,7 @@ os.chdir(out_path)
 time_point = "output000000"
 number_of_frames = len(saving_times)
 
-Temporospatial_Plotting = 'Y'
+Temporospatial_Plotting = 'N'
 Total_Amount_Analysis = 'Y'
 
 
@@ -124,8 +124,8 @@ if Temporospatial_Plotting == 'Y':
         zmax = max([max(zl) for zl in w_O])
         #levels = np.linspace(zmin, 0.28500001,41)
         #kw = dict(levels=levels, vmin=zmin, vmax=0.28500001, origin='lower')
-        levels = np.linspace(0, 0.28500001,41)
-        kw = dict(levels=levels, vmin=0, vmax=0.28500001, origin='lower')
+        levels = np.linspace(0, 17.5,41)
+        kw = dict(levels=levels, vmin=0, vmax=17.5, origin='lower')
         cp = axs.contourf(w_Y,w_X,w_O, **kw)
         cbar = plt.colorbar(cp,format='%0.4f')
         axs.clear()
@@ -141,7 +141,7 @@ if Temporospatial_Plotting == 'Y':
             w_O = np.concatenate((fine_oxy,cOxy),axis=0)
             axs.clear()
             axs.contourf(w_X,w_Y,w_O, **kw)
-            axs.set_title('Oxygen, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+            axs.set_title('Glucose, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
             axs.invert_xaxis()
             axs.axis('scaled')
             
@@ -154,7 +154,7 @@ if Temporospatial_Plotting == 'Y':
         
         plt.show()
         
-        ani.save('./oxygen.gif', writer='imagemagick', fps=4)
+        ani.save('./glucose.gif', writer='imagemagick', fps=4)
     
     
         fig2, ax = plt.subplots()
@@ -171,8 +171,8 @@ if Temporospatial_Plotting == 'Y':
         zmax2 = max([max(zl) for zl in w_G])
         #levels2 = np.linspace(zmin2, zmax2)
         #kw2 = dict(levels=levels2, vmin=zmin2, vmax=zmax2, origin='lower')
-        levels2 = np.linspace(0, 16.897255)
-        kw2 = dict(levels=levels2, vmin=0, vmax=16.897255, origin='lower')
+        levels2 = np.linspace(0, 5.5)
+        kw2 = dict(levels=levels2, vmin=0, vmax=5.5, origin='lower')
         cp2 = ax.contourf(w_X,w_Y,w_G, **kw2)
         cbar2 = plt.colorbar(cp2,format='%0.2f')
         ax.clear()
@@ -187,7 +187,7 @@ if Temporospatial_Plotting == 'Y':
             w_G = np.concatenate((fine_glu,cGlu),axis=0)
             ax.clear()
             ax.contourf(w_X,w_Y,w_G, **kw2)
-            ax.set_title('Glucose, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+            ax.set_title('Glutamine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
             ax.invert_xaxis()
             ax.axis('scaled')
             
@@ -197,7 +197,7 @@ if Temporospatial_Plotting == 'Y':
         
         plt.show()
         
-        ani2.save('./glucose.gif', writer='imagemagick', fps=4)
+        ani2.save('./glutamine.gif', writer='imagemagick', fps=4)
     
     
     
@@ -234,7 +234,7 @@ if Temporospatial_Plotting == 'Y':
             w_C = np.concatenate((fine_chem,cChem),axis=0)
             ax3.clear()
             ax3.contourf(w_X,w_Y,w_C, **kw3)
-            ax3.set_title('Chemokine, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
+            ax3.set_title('lactate, Z=16 um, time = ' +str(saving_times[i])+ ' minutes') 
             ax3.invert_xaxis()
             ax3.axis('scaled')
             
@@ -244,7 +244,7 @@ if Temporospatial_Plotting == 'Y':
         
         plt.show()
         
-        ani3.save('./chemokine.gif', writer='imagemagick', fps=4)
+        ani3.save('./lactate.gif', writer='imagemagick', fps=4)
     
 
 
@@ -319,21 +319,21 @@ if Total_Amount_Analysis == 'Y':
     print(total_chem)
     plt.figure()
     plt.plot(saving_times, total_O2)
-    plt.title('Oxygen')
+    plt.title('Total Glucose Amount (mmol)')
     plt.xlabel('time(min)')
     plt.ylabel('Amount (mmol)')
-    plt.ylim((0, .00005))
+    plt.ylim((0, 0.002))
     plt.show()
     plt.figure()
     plt.plot(saving_times, total_glu)
-    plt.title('Glucose')
+    plt.title('Total Glutamine (mmol)')
     plt.xlabel('time(min)')
     plt.ylabel('Amount (mmol)')
-    plt.ylim((0, .001))
+    plt.ylim((0, .0005))
     plt.show()
     plt.figure()
     plt.plot(saving_times, total_chem)
-    plt.title('Chemokine')
+    plt.title('Total Lactate (mmol)')
     plt.xlabel('time(min)')
     plt.ylabel('Amount (mmol)')
     plt.ylim((0, .0001))

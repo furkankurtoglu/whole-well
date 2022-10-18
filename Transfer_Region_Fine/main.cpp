@@ -121,9 +121,9 @@ int main( int argc, char* argv[] )
     coarse_well.mesh.units = "micron";
     coarse_well.time_units = "min";
     
-    coarse_well.set_density( 0 , "oxygen", "mM", 108000 , 0.00 );
-    coarse_well.add_density( "glucose", "mM", 30000 , 0.0 );
-    coarse_well.add_density( "chemokine", "mM", 40000 , 0.0);
+    coarse_well.set_density( 0 , "glucose", "mM", 30000 , 0.00 );
+    coarse_well.add_density( "glutamine", "mM", 30000 , 0.0 );
+    coarse_well.add_density( "lactate", "mM", 30000 , 0.0);
     // coarse_well.resize_space( 100, 1 , 1 );
     
     double dx = 32;
@@ -144,8 +144,8 @@ int main( int argc, char* argv[] )
     
     for ( int m = 0; m < coarse_well_voxel_number ; m++)
     {
-        coarse_well(m)[0]=0.285; // oxygen
-        coarse_well(m)[1]=16.897255; // glucose
+        coarse_well(m)[0]=17.5; // oxygen
+        coarse_well(m)[1]=5.5; // glucose
         coarse_well(m)[2]=0; //chemokine
     }
     
@@ -163,17 +163,17 @@ int main( int argc, char* argv[] )
 	double tr_dy = 32;
 	double tr_dz = 32;
 
-    transfer_region.set_density( 0 , "oxygen", "mmHg", 108000 , 0.00 );
-    transfer_region.add_density( "glucose", "mM", 30000 , 0.0 );
-    transfer_region.add_density( "chemokine", "mM", 40000 , 0.0);
+    transfer_region.set_density( 0 , "glucose", "mmHg", 108000 , 0.00 );
+    transfer_region.add_density( "glutamine", "mM", 30000 , 0.0 );
+    transfer_region.add_density( "lactate", "mM", 40000 , 0.0);
     transfer_region.resize_space( 224.0, 288.0, -1440, 1440, -1440, 1440, tr_dx, tr_dy, tr_dz );
     
     transfer_region.diffusion_decay_solver = diffusion_decay_solver__constant_coefficients_LOD_3D;   
     
     for ( int m = 0; m < transfer_region.mesh.voxels.size() ; m++)
     {
-        transfer_region(m)[0]=0.285; // oxygen
-        transfer_region(m)[1]=16.897255; // glucose
+        transfer_region(m)[0]=17.5; // oxygen
+        transfer_region(m)[1]=5.5; // glucose
         transfer_region(m)[2]=0; //chemokine
     }
     
